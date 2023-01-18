@@ -1,8 +1,8 @@
-# tiktok-server
+# tiktok-serverdocs
 
 ## 抖音项目服务端实现
 
-> 开发人员请阅读 [[RULES]](RULES.md)
+> 开发人员请阅读 [[RULES]](docs/RULES.md)
 
 ### 项目进度
 
@@ -15,6 +15,25 @@
 - [ ] 用户评论
 - [ ] 关系列表
 - [ ] 消息
+
+## 项目结构
+
+> 目录结构参考 [golang-standards/project-layout](https://github.com/golang-standards/project-layout)
+
+- `configs` - 默认配置
+- `docs` - 设计和用户文档
+- `internal` - 私有应用程序代码库
+- `pkg` - 外部应用程序可以使用的库代码
+- `test` - 外部测试应用程序和测试数据
+- `web` - 静态 Web 资源
+
+
+### 依赖
+
+- [gin-gonic/gin](https://github.com/gin-gonic/gin)
+- [gorm.io/gorm](https://github.com/go-gorm/gorm)
+- [gopkg.in/yaml.v3](https://github.com/go-yaml/yaml/tree/v3.0.1)
+- [github.com/stretchr/testify](https://github.com/stretchr/testify)
 
 ### 相关文档
 
