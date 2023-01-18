@@ -1,0 +1,13 @@
+#gorm:
+#  logger-level:
+server:
+  address: 'localhost:8080'
+
+database:
+  host: 'illtamer.com'
+  port: 2436
+  username: 'bytedance'
+  password: 'Aa123456_'
+  db-name: 'bytedance'
+  # interpolateParams - 解决多编码下SQL注入问题，对本项目存在负影响，遂关闭
+  settings: 'interpolateParams=false'
