@@ -8,7 +8,7 @@
 
 本实现采用阿里云RDS云数据作为储存中心，其连接参数如下
 
-- address: illtamer
+- address: illtamer.com
 - port: 2436
 - username: bytedance
 - password: Aa123456_
