@@ -19,10 +19,13 @@ type UserResponse struct {
 
 // UserRegisterRequest && UserRegisterResponse  https://bytedance.feishu.cn/docs/doccnKrCsU5Iac6eftnFBdsXTof#1bQwYM
 type UserRegisterRequest struct {
-	UserLoginRequest
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 type UserRegisterResponse struct {
-	UserLoginResponse
+	Response
+	UserId int64  `json:"user_id"`
+	Token  string `json:"token"`
 }
 
 // UserLoginRequest & UserLoginResponse https://bytedance.feishu.cn/docs/doccnKrCsU5Iac6eftnFBdsXTof#9UOUMJ
@@ -32,5 +35,6 @@ type UserLoginRequest struct {
 }
 type UserLoginResponse struct {
 	Response
-	UserRequest
+	UserId int64  `json:"user_id"`
+	Token  string `json:"token"`
 }
