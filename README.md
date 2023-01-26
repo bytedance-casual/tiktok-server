@@ -20,13 +20,36 @@
 
 > 目录结构参考 [golang-standards/project-layout](https://github.com/golang-standards/project-layout)
 
+- `cmd` - 项目主要的应用程序
 - `configs` - 默认配置
 - `docs` - 设计和用户文档
+- `idl` - idl 文件夹
 - `internal` - 私有应用程序代码库
+- `kitex_gen` - kitex 生成代码
 - `pkg` - 外部应用程序可以使用的库代码
 - `test` - 外部测试应用程序和测试数据
 - `web` - 静态 Web 资源
 
+## 技术框架
+
+- `语言`: go
+- `底层储存`: 阿里云RDS
+- `服务注册`: Etcd
+- `RPC框架`: 
+  - Kitex
+  - Kitex拓展
+    - registry-etcd
+    - tracer-opentracing
+- `ORM框架`:
+  - GORM
+  - GORM拓展
+    - gorm-mysql
+    - gorm-opentracing
+- `HTTP框架`
+  - Gin
+- `链路追踪`
+  - opentracing
+  - jaeger
 
 ### 依赖
 
