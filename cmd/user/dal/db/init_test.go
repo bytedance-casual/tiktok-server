@@ -8,9 +8,8 @@ import (
 )
 
 func TestInit(t *testing.T) {
-	_ = conf.Init()
-	err := Init()
-	fmt.Println(DB.Name())
-	assert.NoError(t, err)
+	conf.Init()
+	Init()
+	fmt.Println(conf.Config)
 	assert.NotNil(t, DB)
 }

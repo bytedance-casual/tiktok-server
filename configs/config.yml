@@ -11,3 +11,11 @@ database:
   db-name: 'bytedance'
   # interpolateParams - 解决多编码下SQL注入问题，对本项目存在负影响，遂关闭
   settings: 'interpolateParams=false'
+
+redis:
+  host: 'localhost'
+  port: 6379
+  # 为空字符串则不需要密码
+  password: ''
+  # 使用的数据库编号，0为使用默认数据库
+  db-index: 0

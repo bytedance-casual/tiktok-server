@@ -13,7 +13,6 @@ import (
 var DB *gorm.DB
 
 func Init() {
-
 	db, err := gorm.Open(mysql.Open(getDSN(conf.Config.Database)),
 		&gorm.Config{
 			PrepareStmt:            true,

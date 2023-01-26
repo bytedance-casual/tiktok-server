@@ -71,6 +71,20 @@
 
 ## 环境配置
 
+### redis
+
+使用 docker 开启 redis 服务
+
+```shell
+sudo docker pull redis:latest
+sudo docker run -d \
+  --name redis \
+  -p 6379:6379 \
+  -v ~/.config/docker/redis/data/:/data \
+  -v ~/.config/docker/redis/conf/redis.conf:/etc/redis/redis.conf \
+  redis:latest
+```
+
 ### etcd
 
 使用 docker 搭建单机版 etcd
