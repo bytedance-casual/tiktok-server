@@ -15,6 +15,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.3
+	gorm.io/plugin/opentracing v0.0.0-20211220013347-7d2b2af23560
 )
 
 replace github.com/apache/thrift => github.com/apache/thrift v0.13.0

@@ -33,7 +33,7 @@
 ## 技术框架
 
 - `语言`: go
-- `底层储存`: 阿里云RDS
+- `数据库`: 阿里云RDS
 - `服务注册`: Etcd
 - `RPC框架`: 
   - Kitex
@@ -50,13 +50,6 @@
 - `链路追踪`
   - opentracing
   - jaeger
-
-### 依赖
-
-- [gin-gonic/gin](https://github.com/gin-gonic/gin)
-- [gorm.io/gorm](https://github.com/go-gorm/gorm)
-- [gopkg.in/yaml.v3](https://github.com/go-yaml/yaml/tree/v3.0.1)
-- [github.com/stretchr/testify](https://github.com/stretchr/testify)
 
 ### 相关文档
 

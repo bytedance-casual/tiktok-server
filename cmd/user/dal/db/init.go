@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	gormopentracing "gorm.io/plugin/opentracing"
 	"tiktok-server/internal/conf"
 	"tiktok-server/internal/model"
 )
@@ -12,6 +13,7 @@ import (
 var DB *gorm.DB
 
 func Init() {
+
 	db, err := gorm.Open(mysql.Open(getDSN(conf.Config.Database)),
 		&gorm.Config{
 			PrepareStmt:            true,
@@ -20,6 +22,11 @@ func Init() {
 	if err != nil {
 		panic(fmt.Errorf("open db:%w", err))
 	}
+
+	if err = db.Use(gormopentracing.New()); err != nil {
+		panic(fmt.Errorf("register gorm plugin:%w", err))
+	}
+
 	sqlDB, err := db.DB()
 	if err != nil {
 		panic(fmt.Errorf(`get "sql.DB":%w`, err))
