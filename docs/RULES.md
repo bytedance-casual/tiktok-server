@@ -6,28 +6,16 @@
 
 ## 数据库
 
-本实现采用阿里云RDS云数据作为储存中心，其连接参数如下
-
-- address: illtamer.com
-- port: 2436
-- username: bytedance
-- password: Aa123456_
-
-## 分层思想
-
-- `controller` 负责参数校验和调用结果处理
-- `service` 业务逻辑实现
-- `repository` 进行持久层操作
+本实现采用阿里云RDS云数据作为储存中心，其连接参数在 `configs/config.yml` 内
 
 ## internal 结构
 
+- `bound`
 - `conf` 配置文件加载相关
-- `cont` controller 层
-- `db` 数据库相关配置
+- `errren` 错误枚举
+- `middleware` 相关切面操作
 - `model` 模型结构体
-- `repo` repository 层
-- `router` 路由相关
-- `service` service 层
+- `tracer` 链路追踪
 
 ## 代码规范
 
@@ -80,3 +68,42 @@
 ## 优化
 
 建议待全部接口实现完成后进行优化。性能优化顺序：数据库连接、gorm、代码、pprof接口分析
+
+## 环境配置
+
+### etcd
+
+使用 docker 搭建单机版 etcd
+
+```shell
+sudo docker pull bitnami/etcd:latest  
+sudo docker run -d \
+ --privileged=true \
+ --name etcd \
+ -p 2379:2379 \
+ -p 2380:2380 \
+ -v ~/.config/docker/etcd:/bitnami/etcd \
+ --env ALLOW_NONE_AUTHENTICATION=yes \
+ --env ETCD_ADVERTISE_CLIENT_URLS=http://0.0.0.0:2379 \
+ --log-opt max-size=10m \
+ --log-opt max-file=1 \
+ bitnami/etcd:latest
+```
+
+### jaeger
+
+使用 docker 一键安装 opentracing+jaeger，启动后访问 http://localhost:16686
+
+```shell
+sudo docker pull jaegertracing/all-in-one:latest
+sudo docker run -d --name jaeger \                                                                                      ─╯
+  -e COLLECTOR_ZIPKIN_HTTP_PORT=9411 \
+  -p 5775:5775/udp \
+  -p 6831:6831/udp \
+  -p 6832:6832/udp \
+  -p 5778:5778 \
+  -p 16686:16686 \
+  -p 14268:14268 \
+  -p 9411:9411 \
+  jaegertracing/all-in-one:latest
+```
