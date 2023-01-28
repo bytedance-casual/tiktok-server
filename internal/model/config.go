@@ -1,9 +1,9 @@
 package model
 
 type Config struct {
-	Server   Server
-	Database Database
-	Redis    Redis
+	Server  *Server
+	Database *Database
+	Redis    *Redis
 }
 
 type Server struct {
