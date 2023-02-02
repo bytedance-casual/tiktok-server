@@ -43,7 +43,7 @@ func ActionPublish(ctx context.Context, req *publish.PublishActionRequest) (*pub
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode != 0 {
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
 		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
 	}
 	return resp, nil
@@ -54,7 +54,7 @@ func ListPublish(ctx context.Context, req *publish.PublishListRequest) (*publish
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode != 0 {
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
 		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
 	}
 	return resp, nil

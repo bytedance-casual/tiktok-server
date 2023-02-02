@@ -11,7 +11,7 @@ import (
 // ListPublish 查询登录用户的视频发布列表
 func ListPublish(c *gin.Context) {
 	var request publish.PublishListRequest
-	if err := c.Bind(&request); err != nil {
+	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
 	}

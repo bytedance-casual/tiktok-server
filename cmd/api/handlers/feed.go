@@ -11,7 +11,7 @@ import (
 // Feed 不限制登录，返回视频流
 func Feed(c *gin.Context) {
 	var request feed.FeedRequest
-	if err := c.Bind(&request); err != nil {
+	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
 	}

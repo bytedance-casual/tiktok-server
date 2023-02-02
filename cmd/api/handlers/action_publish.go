@@ -11,7 +11,7 @@ import (
 // ActionPublish 登录用户视频投稿
 func ActionPublish(c *gin.Context) {
 	var request publish.PublishActionRequest
-	if err := c.Bind(&request); err != nil {
+	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
 	}

@@ -10,8 +10,8 @@ import (
 )
 
 type FeedRequest struct {
-	LatestTime *int64  `thrift:"latest_time,1,optional" frugal:"1,optional,i64" json:"latest_time,omitempty"`
-	Token      *string `thrift:"token,2,optional" frugal:"2,optional,string" json:"token,omitempty"`
+	LatestTime *int64  `thrift:"latest_time,1,optional" frugal:"1,optional,i64" json:"latest_time,omitempty" uri:"latest_time" form:"latest_time"`
+	Token      *string `thrift:"token,2,optional" frugal:"2,optional,string" json:"token,omitempty" uri:"token" form:"token"`
 }
 
 func NewFeedRequest() *FeedRequest {

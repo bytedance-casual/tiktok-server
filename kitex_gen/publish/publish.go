@@ -11,9 +11,9 @@ import (
 )
 
 type PublishActionRequest struct {
-	Token string `thrift:"token,1,required" frugal:"1,required,string" json:"token"`
-	Data  []byte `thrift:"data,2,required" frugal:"2,required,binary" json:"data"`
-	Title string `thrift:"title,3,required" frugal:"3,required,string" json:"title"`
+	Token string `thrift:"token,1,required" frugal:"1,required,string" json:"token" uri:"token" form:"token"`
+	Data  []byte `thrift:"data,2,required" frugal:"2,required,binary" json:"data" uri:"data" form:"data"`
+	Title string `thrift:"title,3,required" frugal:"3,required,string" json:"title" uri:"title" form:"title"`
 }
 
 func NewPublishActionRequest() *PublishActionRequest {
@@ -562,8 +562,8 @@ func (p *PublishActionResponse) Field2DeepEqual(src *string) bool {
 }
 
 type PublishListRequest struct {
-	UserId int64  `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id"`
-	Token  string `thrift:"token,2,required" frugal:"2,required,string" json:"token"`
+	UserId int64  `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id" uri:"user_id" form:"user_id"`
+	Token  string `thrift:"token,2,required" frugal:"2,required,string" json:"token" uri:"token" form:"token"`
 }
 
 func NewPublishListRequest() *PublishListRequest {

@@ -43,7 +43,7 @@ func Feed(ctx context.Context, req *feed.FeedRequest) (*feed.FeedResponse, error
 	if err != nil {
 		return nil, err
 	}
-	if resp.StatusCode != 0 {
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
 		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
 	}
 	return resp, nil
