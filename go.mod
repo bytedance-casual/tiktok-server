@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/apache/thrift v0.16.0
 	github.com/cloudwego/kitex v0.4.4
+	github.com/form3tech-oss/jwt-go v3.2.3+incompatible
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/jinzhu/copier v0.3.5
@@ -47,6 +48,7 @@ require (
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/pprof v0.0.0-20220608213341-c488b8fa1db3 // indirect
 	github.com/jhump/protoreflect v1.8.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -58,6 +60,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/oleiade/lane v1.0.1 // indirect
+	github.com/onsi/gomega v1.26.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/tidwall/gjson v1.9.3 // indirect

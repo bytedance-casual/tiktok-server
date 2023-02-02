@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
@@ -11,11 +12,12 @@ import (
 // RegisterUser 注册用户
 func RegisterUser(c *gin.Context) {
 	var request user.UserRegisterRequest
-	if err := c.Bind(&request); err != nil {
+	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
 	}
-
+	//fmt.Println(c.Query("username"))
+	fmt.Println(request)
 	if len(request.Username) == 0 || len(request.Password) == 0 {
 		BadResponse(c, erren.ParamErr)
 		return

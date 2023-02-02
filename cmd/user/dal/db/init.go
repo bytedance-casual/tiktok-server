@@ -38,7 +38,7 @@ func initSQLDB(sqlDB *sql.DB) {
 	// do nothing
 }
 
-func getDSN(config model.Database) string {
+func getDSN(config *model.Database) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?%s",
 		config.Username,
 		config.Password,
