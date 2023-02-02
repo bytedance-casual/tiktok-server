@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/handlers"
+	"tiktok-server/internal/middleware"
 )
 
 func initRouter(engine *gin.Engine) {
@@ -10,9 +11,11 @@ func initRouter(engine *gin.Engine) {
 	router := engine.Group("/douyin")
 
 	// basic apis
-	router.GET("/feed/", handlers.Feed)
 	router.POST("/user/register/", handlers.RegisterUser)
 	router.POST("/user/login/", handlers.LoginUser)
+	// jwt middleware
+	router.Use(middleware.JWTAuthMiddleware())
+	router.GET("/feed/", handlers.Feed)
 	router.GET("/user/", handlers.User)
 	router.POST("/publish/action/", handlers.ActionPublish)
 	router.GET("/publish/list/", handlers.ListPublish)

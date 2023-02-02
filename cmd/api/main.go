@@ -11,6 +11,7 @@ import (
 func Init() {
 	tracer.InitJaeger(conf.ApiServiceName)
 	rpc.InitRPC()
+	conf.Init()
 }
 
 func main() {

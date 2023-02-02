@@ -11,7 +11,7 @@ import (
 // LoginUser 用户登录
 func LoginUser(c *gin.Context) {
 	var request user.UserLoginRequest
-	if err := c.Bind(&request); err != nil {
+	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
 	}

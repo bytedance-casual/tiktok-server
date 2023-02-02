@@ -11,7 +11,7 @@ import (
 // User 查询用户信息
 func User(c *gin.Context) {
 	var request user.UserRequest
-	if err := c.Bind(&request); err != nil {
+	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
 	}
