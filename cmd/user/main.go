@@ -9,7 +9,6 @@ import (
 	trace "github.com/kitex-contrib/tracer-opentracing"
 	"net"
 	"tiktok-server/cmd/user/dal"
-	"tiktok-server/cmd/user/rpc"
 	"tiktok-server/internal/bound"
 	"tiktok-server/internal/conf"
 	"tiktok-server/internal/middleware"
@@ -20,7 +19,6 @@ import (
 func Init() {
 	conf.Init()
 	tracer.InitJaeger(conf.UserServiceName)
-	rpc.InitRPC()
 	dal.Init()
 }
 
