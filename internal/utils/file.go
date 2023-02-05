@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"io"
+	"mime/multipart"
 	"os"
 )
 
@@ -13,4 +15,18 @@ func ExistFile(filePath string) bool {
 		return false
 	}
 	return false
+}
+
+func UploadedFile2Bytes(file *multipart.FileHeader) ([]byte, error) {
+	src, err := file.Open()
+	if err != nil {
+		return nil, err
+	}
+	defer src.Close()
+
+	bytes, err := io.ReadAll(src)
+	if err != nil {
+		return nil, err
+	}
+	return bytes, nil
 }

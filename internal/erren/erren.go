@@ -27,7 +27,7 @@ import (
 var ErrorMap = map[int32]struct{}{10001: {}, 10002: {}, 10003: {}, 10004: {}, 10005: {}}
 
 const (
-	SuccessCode                = 10000
+	SuccessCode                = 0
 	ServiceErrCode             = 10001
 	ParamErrCode               = 10002
 	AuthorizationFailedErrCode = 10003

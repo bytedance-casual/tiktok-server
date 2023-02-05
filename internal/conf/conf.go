@@ -14,6 +14,7 @@ const (
 	UserServiceName            = "user_service"
 	EtcdAddress                = "127.0.0.1:2379"
 	CPURateLimit       float64 = 80.0
+	WebResourceFolder          = "./web/"
 )
 
 var Config *model.Config
