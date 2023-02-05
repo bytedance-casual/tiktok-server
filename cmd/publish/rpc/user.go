@@ -1,12 +1,15 @@
 package rpc
 
 import (
+	"context"
 	"github.com/cloudwego/kitex/client"
 	"github.com/cloudwego/kitex/pkg/retry"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	trace "github.com/kitex-contrib/tracer-opentracing"
 	"tiktok-server/internal/conf"
+	"tiktok-server/internal/erren"
 	"tiktok-server/internal/middleware"
+	"tiktok-server/kitex_gen/user"
 	"tiktok-server/kitex_gen/user/userservice"
 	"time"
 )
@@ -18,7 +21,6 @@ func initUserRPC() {
 	if err != nil {
 		panic(err)
 	}
-
 	c, err := userservice.NewClient(
 		conf.UserServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
@@ -34,4 +36,15 @@ func initUserRPC() {
 		panic(err)
 	}
 	userClient = c
+}
+
+func User(ctx context.Context, req *user.UserRequest) (*user.UserResponse, error) {
+	resp, err := userClient.User(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
 }

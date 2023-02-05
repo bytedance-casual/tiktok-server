@@ -5,13 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
+	"tiktok-server/internal/utils"
 	"tiktok-server/kitex_gen/publish"
 )
 
 // ActionPublish 登录用户视频投稿
 func ActionPublish(c *gin.Context) {
 	var request publish.PublishActionRequest
-	if err := c.ShouldBind(&request); err != nil {
+	if err := parse(&request, c); err != nil {
 		BadResponse(c, err)
 		return
 	}
@@ -29,4 +30,19 @@ func ActionPublish(c *gin.Context) {
 		return
 	}
 	SendResponse(c, resp)
+}
+
+func parse(req *publish.PublishActionRequest, c *gin.Context) error {
+	file, err := c.FormFile("data")
+	if err != nil {
+		return err
+	}
+	bytes, err := utils.UploadedFile2Bytes(file)
+	if err != nil {
+		return err
+	}
+	req.Data = bytes
+	req.Title = c.PostForm("title")
+	req.Token = c.PostForm("token")
+	return nil
 }

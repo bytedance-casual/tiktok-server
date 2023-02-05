@@ -1,0 +1,19 @@
+POST http://localhost:8080/douyin/publish/action
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="title"
+Content-Type: text/plain
+
+测试标题
+--WebAppBoundary
+Content-Disposition: form-data; name="token"
+Content-Type: text/plain
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IklsbFRhbWVyIiwiaWQiOjIsImV4cCI6MTY3NTYwMzA3MSwiaWF0IjoxNjc1NTk5NDcxLCJpc3MiOiJieXRlZGFuY2UifQ.FaIvlZyIcp4JJaxGckiMMOjufAEZLxjZ_6gI5A5MaeI
+--WebAppBoundary
+Content-Disposition: form-data; name="data"; filename="bear.mp4"
+Content-Type: application/octet-stream
+
+< ./bear.mp4
+--WebAppBoundary
