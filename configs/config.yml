@@ -3,6 +3,15 @@
 server:
   address: '0.0.0.0:8080'
 
+oss-aliyun:
+  endpoint: 'https://oss-cn-hangzhou.aliyuncs.com'
+  access-key-id: 'LTAI5tLEnBd7osB5r2mnJ2gc'
+  access-key-secret: 'RN49wBV1enOe99UE9MK1gG5F6aHBPn'
+  bucket-name: 'illtamer-web-picture'
+  base-url: 'public/bytedance/'
+  # 公网访问前缀
+  public-url: 'https://illtamer-web-picture.oss-cn-hangzhou.aliyuncs.com/public/bytedance/'
+
 database:
   host: 'illtamer.com'
   port: 2436

@@ -1,13 +1,23 @@
 package model
 
 type Config struct {
-	Server  *Server
-	Database *Database
-	Redis    *Redis
+	Server    *Server
+	OssAliyun *OssAliyun `yaml:"oss-aliyun"`
+	Database  *Database
+	Redis     *Redis
 }
 
 type Server struct {
 	Address string
+}
+
+type OssAliyun struct {
+	Endpoint        string
+	AccessKeyID     string `yaml:"access-key-id"`
+	AccessKeySecret string `yaml:"access-key-secret"`
+	BucketName      string `yaml:"bucket-name"`
+	BaseURL         string `yaml:"base-url"`
+	PublicURL       string `yaml:"public-url"`
 }
 
 type Database struct {
