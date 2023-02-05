@@ -57,12 +57,13 @@ func QueryUser(ctx context.Context, userName string) ([]*User, error) {
 }
 
 // QueryIsFollow   querying if followed someone by followedUserId. userid is parsed from your token.
-func QueryIsFollow(ctx context.Context, userid, followedUserId int64) (bool, error) {
-	res := make([]*User, 0)
-	if result := DB.WithContext(ctx).Where("user_id = ? AND followed_user_id = ?", userid).Find(&res); result.Error != nil {
-		return false, result.Error
-	} else if result.RowsAffected == 0 {
-		return false, nil
-	}
-	return true, nil
+func QueryIsFollow(ctx context.Context, userid int64, followedUserId int64) (bool, error) {
+	//res := make([]*User, 0)
+	//if result := DB.WithContext(ctx).Where("user_id = ? AND followed_user_id = ?", userid, followedUserId).Find(&res); result.Error != nil {
+	//	return false, result.Error
+	//} else if result.RowsAffected == 0 {
+	//	return false, nil
+	//}
+	// TODO opt fans & follows table
+	return false, nil
 }
