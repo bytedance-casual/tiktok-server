@@ -75,32 +75,27 @@ func RefreshToken(tokenString string) (string, error) {
 
 func JWTAuthMiddleware() func(ctx *gin.Context) {
 	return func(ctx *gin.Context) {
-		// 根据实际情况取TOKEN, 这里从request header取
-		//tokenStr := ctx.Request.Header.Get("Authorization")
 		tokenStr := ctx.Query("token")
-		//fmt.Println(tokenStr)
-		if tokenStr == "" {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"code": -1,
-				"msg":  "Have not token",
-			})
+		// adapt to publish/action
+		if len(tokenStr) == 0 {
+			tokenStr = ctx.PostForm("token")
+		}
+
+		if len(tokenStr) == 0 {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": -1, "msg": "Have no token"})
 			return
 		}
+
 		claims, err := ParseToken(tokenStr)
-		//fmt.Println(claims)
 		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"code": -1,
-				"msg":  "ERR_AUTH_INVALID",
-			})
-			return
-		} else if time.Now().Unix() > claims.ExpiresAt {
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"code": -1,
-				"msg":  "ERR_AUTH_EXPIRED",
-			})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": -1, "msg": "ERR_AUTH_INVALID"})
 			return
 		}
+		if time.Now().Unix() > claims.ExpiresAt {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"code": -1, "msg": "ERR_AUTH_EXPIRED"})
+			return
+		}
+
 		// 此处已经通过了, 可以把Claims中的有效信息拿出来放入上下文使用
 		ctx.Set("username", claims.Username)
 		ctx.Set("id", claims.ID)
