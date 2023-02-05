@@ -12,10 +12,14 @@
 
 - `bound`
 - `conf` 配置文件加载相关
+- `lock` 锁通用操作
 - `errren` 错误枚举
 - `middleware` 相关切面操作
 - `model` 模型结构体
+- `repo` 数据库通用操作
+- `sources` 数据源相关
 - `tracer` 链路追踪
+- `utils` 工具类
 
 ## 代码规范
 
@@ -121,3 +125,7 @@ sudo docker run -d --name jaeger \                                              
   -p 9411:9411 \
   jaegertracing/all-in-one:latest
 ```
+
+### ffmpeg
+
+`publish/action` 接口使用 `ffmpeg` 截取视频帧，如果要测试相关功能，请先在环境中安装配置。[下载](https://www.ffmpeg.org/download.html#build-windows)
