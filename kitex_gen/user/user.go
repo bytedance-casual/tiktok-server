@@ -10,8 +10,8 @@ import (
 )
 
 type UserRequest struct {
-	UserId int64  `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id" uri:"user_id" form:"user_id"`
-	Token  string `thrift:"token,2,required" frugal:"2,required,string" json:"token" uri:"token" form:"token"`
+	UserId int64  `thrift:"user_id,1,required" frugal:"1,required,i64" json:"user_id"`
+	Token  string `thrift:"token,2,required" frugal:"2,required,string" json:"token"`
 }
 
 func NewUserRequest() *UserRequest {
@@ -569,8 +569,8 @@ func (p *UserResponse) Field3DeepEqual(src *User) bool {
 }
 
 type UserRegisterRequest struct {
-	Username string `thrift:"username,1,required" frugal:"1,required,string" json:"username" uri:"username" form:"username"`
-	Password string `thrift:"password,2,required" frugal:"2,required,string" json:"password" uri:"password" form:"password"`
+	Username string `thrift:"username,1,required" frugal:"1,required,string" json:"username"`
+	Password string `thrift:"password,2,required" frugal:"2,required,string" json:"password"`
 }
 
 func NewUserRegisterRequest() *UserRegisterRequest {
@@ -1186,8 +1186,8 @@ func (p *UserRegisterResponse) Field4DeepEqual(src string) bool {
 }
 
 type UserLoginRequest struct {
-	Username string `thrift:"username,1,required" frugal:"1,required,string" json:"username" uri:"username" form:"username"`
-	Password string `thrift:"password,2,required" frugal:"2,required,string" json:"password" uri:"password" form:"password"`
+	Username string `thrift:"username,1,required" frugal:"1,required,string" json:"username"`
+	Password string `thrift:"password,2,required" frugal:"2,required,string" json:"password"`
 }
 
 func NewUserLoginRequest() *UserLoginRequest {
