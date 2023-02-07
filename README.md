@@ -2,7 +2,8 @@
 
 ## 抖音项目服务端实现
 
-> 开发人员请阅读 [[RULES]](docs/RULES.md)
+> 开发人员手册 [[RULES]](docs/RULES.md)
+> 开发流程概述 [[FLOW]](docs/FLOW.md)
 
 ### 项目进度
 

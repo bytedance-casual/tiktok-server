@@ -2065,7 +2065,7 @@ func (p *UserServiceUserResult) field0Length() int {
 	return l
 }
 
-func (p *UserServiceUserRegisterArgs) FastRead(buf []byte) (int, error) {
+func (p *UserServiceRegisterUserArgs) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -2133,7 +2133,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceUserRegisterArgs[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceRegisterUserArgs[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -2141,10 +2141,10 @@ ReadFieldEndError:
 ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return offset, thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserServiceUserRegisterArgs[fieldId]))
+	return offset, thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserServiceRegisterUserArgs[fieldId]))
 }
 
-func (p *UserServiceUserRegisterArgs) FastReadField1(buf []byte) (int, error) {
+func (p *UserServiceRegisterUserArgs) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
 	tmp := NewUserRegisterRequest()
@@ -2158,13 +2158,13 @@ func (p *UserServiceUserRegisterArgs) FastReadField1(buf []byte) (int, error) {
 }
 
 // for compatibility
-func (p *UserServiceUserRegisterArgs) FastWrite(buf []byte) int {
+func (p *UserServiceRegisterUserArgs) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *UserServiceUserRegisterArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceRegisterUserArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UserRegister_args")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "RegisterUser_args")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 	}
@@ -2173,9 +2173,9 @@ func (p *UserServiceUserRegisterArgs) FastWriteNocopy(buf []byte, binaryWriter b
 	return offset
 }
 
-func (p *UserServiceUserRegisterArgs) BLength() int {
+func (p *UserServiceRegisterUserArgs) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UserRegister_args")
+	l += bthrift.Binary.StructBeginLength("RegisterUser_args")
 	if p != nil {
 		l += p.field1Length()
 	}
@@ -2184,7 +2184,7 @@ func (p *UserServiceUserRegisterArgs) BLength() int {
 	return l
 }
 
-func (p *UserServiceUserRegisterArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceRegisterUserArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "req", thrift.STRUCT, 1)
 	offset += p.Req.FastWriteNocopy(buf[offset:], binaryWriter)
@@ -2192,7 +2192,7 @@ func (p *UserServiceUserRegisterArgs) fastWriteField1(buf []byte, binaryWriter b
 	return offset
 }
 
-func (p *UserServiceUserRegisterArgs) field1Length() int {
+func (p *UserServiceRegisterUserArgs) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("req", thrift.STRUCT, 1)
 	l += p.Req.BLength()
@@ -2200,7 +2200,7 @@ func (p *UserServiceUserRegisterArgs) field1Length() int {
 	return l
 }
 
-func (p *UserServiceUserRegisterResult) FastRead(buf []byte) (int, error) {
+func (p *UserServiceRegisterUserResult) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -2262,7 +2262,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceUserRegisterResult[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceRegisterUserResult[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -2271,7 +2271,7 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserServiceUserRegisterResult) FastReadField0(buf []byte) (int, error) {
+func (p *UserServiceRegisterUserResult) FastReadField0(buf []byte) (int, error) {
 	offset := 0
 
 	tmp := NewUserRegisterResponse()
@@ -2285,13 +2285,13 @@ func (p *UserServiceUserRegisterResult) FastReadField0(buf []byte) (int, error) 
 }
 
 // for compatibility
-func (p *UserServiceUserRegisterResult) FastWrite(buf []byte) int {
+func (p *UserServiceRegisterUserResult) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *UserServiceUserRegisterResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceRegisterUserResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UserRegister_result")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "RegisterUser_result")
 	if p != nil {
 		offset += p.fastWriteField0(buf[offset:], binaryWriter)
 	}
@@ -2300,9 +2300,9 @@ func (p *UserServiceUserRegisterResult) FastWriteNocopy(buf []byte, binaryWriter
 	return offset
 }
 
-func (p *UserServiceUserRegisterResult) BLength() int {
+func (p *UserServiceRegisterUserResult) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UserRegister_result")
+	l += bthrift.Binary.StructBeginLength("RegisterUser_result")
 	if p != nil {
 		l += p.field0Length()
 	}
@@ -2311,7 +2311,7 @@ func (p *UserServiceUserRegisterResult) BLength() int {
 	return l
 }
 
-func (p *UserServiceUserRegisterResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceRegisterUserResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	if p.IsSetSuccess() {
 		offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "success", thrift.STRUCT, 0)
@@ -2321,7 +2321,7 @@ func (p *UserServiceUserRegisterResult) fastWriteField0(buf []byte, binaryWriter
 	return offset
 }
 
-func (p *UserServiceUserRegisterResult) field0Length() int {
+func (p *UserServiceRegisterUserResult) field0Length() int {
 	l := 0
 	if p.IsSetSuccess() {
 		l += bthrift.Binary.FieldBeginLength("success", thrift.STRUCT, 0)
@@ -2331,7 +2331,7 @@ func (p *UserServiceUserRegisterResult) field0Length() int {
 	return l
 }
 
-func (p *UserServiceUserLoginArgs) FastRead(buf []byte) (int, error) {
+func (p *UserServiceLoginUserArgs) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -2399,7 +2399,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceUserLoginArgs[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceLoginUserArgs[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -2407,10 +2407,10 @@ ReadFieldEndError:
 ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 RequiredFieldNotSetError:
-	return offset, thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserServiceUserLoginArgs[fieldId]))
+	return offset, thrift.NewTProtocolExceptionWithType(thrift.INVALID_DATA, fmt.Errorf("required field %s is not set", fieldIDToName_UserServiceLoginUserArgs[fieldId]))
 }
 
-func (p *UserServiceUserLoginArgs) FastReadField1(buf []byte) (int, error) {
+func (p *UserServiceLoginUserArgs) FastReadField1(buf []byte) (int, error) {
 	offset := 0
 
 	tmp := NewUserLoginRequest()
@@ -2424,13 +2424,13 @@ func (p *UserServiceUserLoginArgs) FastReadField1(buf []byte) (int, error) {
 }
 
 // for compatibility
-func (p *UserServiceUserLoginArgs) FastWrite(buf []byte) int {
+func (p *UserServiceLoginUserArgs) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *UserServiceUserLoginArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceLoginUserArgs) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UserLogin_args")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "LoginUser_args")
 	if p != nil {
 		offset += p.fastWriteField1(buf[offset:], binaryWriter)
 	}
@@ -2439,9 +2439,9 @@ func (p *UserServiceUserLoginArgs) FastWriteNocopy(buf []byte, binaryWriter bthr
 	return offset
 }
 
-func (p *UserServiceUserLoginArgs) BLength() int {
+func (p *UserServiceLoginUserArgs) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UserLogin_args")
+	l += bthrift.Binary.StructBeginLength("LoginUser_args")
 	if p != nil {
 		l += p.field1Length()
 	}
@@ -2450,7 +2450,7 @@ func (p *UserServiceUserLoginArgs) BLength() int {
 	return l
 }
 
-func (p *UserServiceUserLoginArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceLoginUserArgs) fastWriteField1(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "req", thrift.STRUCT, 1)
 	offset += p.Req.FastWriteNocopy(buf[offset:], binaryWriter)
@@ -2458,7 +2458,7 @@ func (p *UserServiceUserLoginArgs) fastWriteField1(buf []byte, binaryWriter bthr
 	return offset
 }
 
-func (p *UserServiceUserLoginArgs) field1Length() int {
+func (p *UserServiceLoginUserArgs) field1Length() int {
 	l := 0
 	l += bthrift.Binary.FieldBeginLength("req", thrift.STRUCT, 1)
 	l += p.Req.BLength()
@@ -2466,7 +2466,7 @@ func (p *UserServiceUserLoginArgs) field1Length() int {
 	return l
 }
 
-func (p *UserServiceUserLoginResult) FastRead(buf []byte) (int, error) {
+func (p *UserServiceLoginUserResult) FastRead(buf []byte) (int, error) {
 	var err error
 	var offset int
 	var l int
@@ -2528,7 +2528,7 @@ ReadStructBeginError:
 ReadFieldBeginError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d begin error: ", p, fieldId), err)
 ReadFieldError:
-	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceUserLoginResult[fieldId]), err)
+	return offset, thrift.PrependError(fmt.Sprintf("%T read field %d '%s' error: ", p, fieldId, fieldIDToName_UserServiceLoginUserResult[fieldId]), err)
 SkipFieldError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T field %d skip type %d error: ", p, fieldId, fieldTypeId), err)
 ReadFieldEndError:
@@ -2537,7 +2537,7 @@ ReadStructEndError:
 	return offset, thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
 }
 
-func (p *UserServiceUserLoginResult) FastReadField0(buf []byte) (int, error) {
+func (p *UserServiceLoginUserResult) FastReadField0(buf []byte) (int, error) {
 	offset := 0
 
 	tmp := NewUserLoginResponse()
@@ -2551,13 +2551,13 @@ func (p *UserServiceUserLoginResult) FastReadField0(buf []byte) (int, error) {
 }
 
 // for compatibility
-func (p *UserServiceUserLoginResult) FastWrite(buf []byte) int {
+func (p *UserServiceLoginUserResult) FastWrite(buf []byte) int {
 	return 0
 }
 
-func (p *UserServiceUserLoginResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceLoginUserResult) FastWriteNocopy(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
-	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "UserLogin_result")
+	offset += bthrift.Binary.WriteStructBegin(buf[offset:], "LoginUser_result")
 	if p != nil {
 		offset += p.fastWriteField0(buf[offset:], binaryWriter)
 	}
@@ -2566,9 +2566,9 @@ func (p *UserServiceUserLoginResult) FastWriteNocopy(buf []byte, binaryWriter bt
 	return offset
 }
 
-func (p *UserServiceUserLoginResult) BLength() int {
+func (p *UserServiceLoginUserResult) BLength() int {
 	l := 0
-	l += bthrift.Binary.StructBeginLength("UserLogin_result")
+	l += bthrift.Binary.StructBeginLength("LoginUser_result")
 	if p != nil {
 		l += p.field0Length()
 	}
@@ -2577,7 +2577,7 @@ func (p *UserServiceUserLoginResult) BLength() int {
 	return l
 }
 
-func (p *UserServiceUserLoginResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
+func (p *UserServiceLoginUserResult) fastWriteField0(buf []byte, binaryWriter bthrift.BinaryWriter) int {
 	offset := 0
 	if p.IsSetSuccess() {
 		offset += bthrift.Binary.WriteFieldBegin(buf[offset:], "success", thrift.STRUCT, 0)
@@ -2587,7 +2587,7 @@ func (p *UserServiceUserLoginResult) fastWriteField0(buf []byte, binaryWriter bt
 	return offset
 }
 
-func (p *UserServiceUserLoginResult) field0Length() int {
+func (p *UserServiceLoginUserResult) field0Length() int {
 	l := 0
 	if p.IsSetSuccess() {
 		l += bthrift.Binary.FieldBeginLength("success", thrift.STRUCT, 0)
@@ -2605,18 +2605,18 @@ func (p *UserServiceUserResult) GetResult() interface{} {
 	return p.Success
 }
 
-func (p *UserServiceUserRegisterArgs) GetFirstArgument() interface{} {
+func (p *UserServiceRegisterUserArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-func (p *UserServiceUserRegisterResult) GetResult() interface{} {
+func (p *UserServiceRegisterUserResult) GetResult() interface{} {
 	return p.Success
 }
 
-func (p *UserServiceUserLoginArgs) GetFirstArgument() interface{} {
+func (p *UserServiceLoginUserArgs) GetFirstArgument() interface{} {
 	return p.Req
 }
 
-func (p *UserServiceUserLoginResult) GetResult() interface{} {
+func (p *UserServiceLoginUserResult) GetResult() interface{} {
 	return p.Success
 }

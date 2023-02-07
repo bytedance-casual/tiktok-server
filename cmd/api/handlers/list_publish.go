@@ -16,7 +16,7 @@ func ListPublish(c *gin.Context) {
 		return
 	}
 
-	if request.UserId <= 0 || len(request.Token) == 0 {
+	if request.UserId <= 0 {
 		BadResponse(c, erren.ParamErr)
 		return
 	}

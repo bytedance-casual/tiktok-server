@@ -8,7 +8,7 @@ import (
 	"tiktok-server/kitex_gen/feed"
 )
 
-// Feed 不限制登录，返回视频流
+// Feed 不限制登录，返回视频流，视频数由服务端控制，单次最多30个。
 func Feed(c *gin.Context) {
 	var request feed.FeedRequest
 	if err := c.ShouldBind(&request); err != nil {

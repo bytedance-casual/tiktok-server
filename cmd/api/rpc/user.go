@@ -49,8 +49,8 @@ func User(ctx context.Context, req *user.UserRequest) (*user.UserResponse, error
 	return resp, nil
 }
 
-func UserRegister(ctx context.Context, req *user.UserRegisterRequest) (*user.UserRegisterResponse, error) {
-	resp, err := userClient.UserRegister(ctx, req)
+func RegisterUser(ctx context.Context, req *user.UserRegisterRequest) (*user.UserRegisterResponse, error) {
+	resp, err := userClient.RegisterUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -60,8 +60,8 @@ func UserRegister(ctx context.Context, req *user.UserRegisterRequest) (*user.Use
 	return resp, nil
 }
 
-func UserLogin(ctx context.Context, req *user.UserLoginRequest) (*user.UserLoginResponse, error) {
-	resp, err := userClient.UserLogin(ctx, req)
+func LoginUser(ctx context.Context, req *user.UserLoginRequest) (*user.UserLoginResponse, error) {
+	resp, err := userClient.LoginUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}

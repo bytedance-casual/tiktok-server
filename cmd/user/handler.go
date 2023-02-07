@@ -29,8 +29,8 @@ func (s *UserServiceImpl) User(ctx context.Context, req *user.UserRequest) (resp
 	return resp, nil
 }
 
-// UserRegister implements the UserServiceImpl interface.
-func (s *UserServiceImpl) UserRegister(ctx context.Context, req *user.UserRegisterRequest) (resp *user.UserRegisterResponse, err error) {
+// RegisterUser implements the UserServiceImpl interface.
+func (s *UserServiceImpl) RegisterUser(ctx context.Context, req *user.UserRegisterRequest) (resp *user.UserRegisterResponse, err error) {
 	// TODO: Your code here...
 	resp = new(user.UserRegisterResponse)
 
@@ -47,11 +47,10 @@ func (s *UserServiceImpl) UserRegister(ctx context.Context, req *user.UserRegist
 	}
 	resp = &user.UserRegisterResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, UserId: int64(userId), Token: token}
 	return resp, nil
-
 }
 
-// UserLogin implements the UserServiceImpl interface.
-func (s *UserServiceImpl) UserLogin(ctx context.Context, req *user.UserLoginRequest) (resp *user.UserLoginResponse, err error) {
+// LoginUser implements the UserServiceImpl interface.
+func (s *UserServiceImpl) LoginUser(ctx context.Context, req *user.UserLoginRequest) (resp *user.UserLoginResponse, err error) {
 	// TODO: Your code here...
 	resp = new(user.UserLoginResponse)
 

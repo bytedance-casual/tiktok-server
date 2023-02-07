@@ -12,8 +12,8 @@ import (
 // Client is designed to provide IDL-compatible methods with call-option parameter for kitex framework.
 type Client interface {
 	User(ctx context.Context, req *user.UserRequest, callOptions ...callopt.Option) (r *user.UserResponse, err error)
-	UserRegister(ctx context.Context, req *user.UserRegisterRequest, callOptions ...callopt.Option) (r *user.UserRegisterResponse, err error)
-	UserLogin(ctx context.Context, req *user.UserLoginRequest, callOptions ...callopt.Option) (r *user.UserLoginResponse, err error)
+	RegisterUser(ctx context.Context, req *user.UserRegisterRequest, callOptions ...callopt.Option) (r *user.UserRegisterResponse, err error)
+	LoginUser(ctx context.Context, req *user.UserLoginRequest, callOptions ...callopt.Option) (r *user.UserLoginResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -50,12 +50,12 @@ func (p *kUserServiceClient) User(ctx context.Context, req *user.UserRequest, ca
 	return p.kClient.User(ctx, req)
 }
 
-func (p *kUserServiceClient) UserRegister(ctx context.Context, req *user.UserRegisterRequest, callOptions ...callopt.Option) (r *user.UserRegisterResponse, err error) {
+func (p *kUserServiceClient) RegisterUser(ctx context.Context, req *user.UserRegisterRequest, callOptions ...callopt.Option) (r *user.UserRegisterResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.UserRegister(ctx, req)
+	return p.kClient.RegisterUser(ctx, req)
 }
 
-func (p *kUserServiceClient) UserLogin(ctx context.Context, req *user.UserLoginRequest, callOptions ...callopt.Option) (r *user.UserLoginResponse, err error) {
+func (p *kUserServiceClient) LoginUser(ctx context.Context, req *user.UserLoginRequest, callOptions ...callopt.Option) (r *user.UserLoginResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.UserLogin(ctx, req)
+	return p.kClient.LoginUser(ctx, req)
 }

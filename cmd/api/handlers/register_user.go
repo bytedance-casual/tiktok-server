@@ -25,7 +25,7 @@ func RegisterUser(c *gin.Context) {
 
 	// gin 貌似没有配套上下文参数，暂时手动创建
 	ctx := context.Background()
-	resp, err := rpc.UserRegister(ctx, &request)
+	resp, err := rpc.RegisterUser(ctx, &request)
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return

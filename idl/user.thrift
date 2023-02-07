@@ -45,6 +45,6 @@ struct User {
 
 service UserService {
     UserResponse User(1:required UserRequest req)
-    UserRegisterResponse UserRegister(1:required UserRegisterRequest req)
-    UserLoginResponse UserLogin(1:required UserLoginRequest req)
+    UserRegisterResponse RegisterUser(1:required UserRegisterRequest req)
+    UserLoginResponse LoginUser(1:required UserLoginRequest req)
 }

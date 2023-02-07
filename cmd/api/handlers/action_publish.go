@@ -17,7 +17,7 @@ func ActionPublish(c *gin.Context) {
 		return
 	}
 
-	if len(request.Token) == 0 || len(request.Title) == 0 || len(request.Data) == 0 {
+	if len(request.Title) == 0 || len(request.Data) == 0 {
 		BadResponse(c, erren.ParamErr)
 		return
 	}

@@ -9,8 +9,12 @@ import (
 
 const (
 	ApiServiceName             = "api_service"
+	CommentService             = "comment_service"
+	FavoriteService            = "favorite_service"
 	FeedServiceName            = "feed_service"
+	MessageService             = "message_service"
 	PublishServiceName         = "publish_service"
+	RelationService            = "relation_service"
 	UserServiceName            = "user_service"
 	EtcdAddress                = "127.0.0.1:2379"
 	CPURateLimit       float64 = 80.0
