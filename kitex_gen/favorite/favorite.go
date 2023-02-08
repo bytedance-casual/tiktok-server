@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
 	"strings"
-	"tiktok-server/cmd/favorite/kitex_gen/feed"
+	"tiktok-server/kitex_gen/feed"
 )
 
 type FavoriteActionRequest struct {

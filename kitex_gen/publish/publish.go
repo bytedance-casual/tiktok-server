@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
 	"strings"
-	"tiktok-server/kitex_gen/feedUser"
+	"tiktok-server/kitex_gen/feed"
 )
 
 type PublishActionRequest struct {
@@ -801,9 +801,9 @@ func (p *PublishListRequest) Field2DeepEqual(src string) bool {
 }
 
 type PublishListResponse struct {
-	StatusCode int32             `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
-	StatusMsg  *string           `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
-	VideoList  []*feeduser.Video `thrift:"video_list,3,required" frugal:"3,required,list<feeduser.Video>" json:"video_list"`
+	StatusCode int32         `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
+	StatusMsg  *string       `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
+	VideoList  []*feed.Video `thrift:"video_list,3,required" frugal:"3,required,list<feed.Video>" json:"video_list"`
 }
 
 func NewPublishListResponse() *PublishListResponse {
@@ -827,7 +827,7 @@ func (p *PublishListResponse) GetStatusMsg() (v string) {
 	return *p.StatusMsg
 }
 
-func (p *PublishListResponse) GetVideoList() (v []*feeduser.Video) {
+func (p *PublishListResponse) GetVideoList() (v []*feed.Video) {
 	return p.VideoList
 }
 func (p *PublishListResponse) SetStatusCode(val int32) {
@@ -836,7 +836,7 @@ func (p *PublishListResponse) SetStatusCode(val int32) {
 func (p *PublishListResponse) SetStatusMsg(val *string) {
 	p.StatusMsg = val
 }
-func (p *PublishListResponse) SetVideoList(val []*feeduser.Video) {
+func (p *PublishListResponse) SetVideoList(val []*feed.Video) {
 	p.VideoList = val
 }
 
@@ -967,9 +967,9 @@ func (p *PublishListResponse) ReadField3(iprot thrift.TProtocol) error {
 	if err != nil {
 		return err
 	}
-	p.VideoList = make([]*feeduser.Video, 0, size)
+	p.VideoList = make([]*feed.Video, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := feeduser.NewVideo()
+		_elem := feed.NewVideo()
 		if err := _elem.Read(iprot); err != nil {
 			return err
 		}
@@ -1124,7 +1124,7 @@ func (p *PublishListResponse) Field2DeepEqual(src *string) bool {
 	}
 	return true
 }
-func (p *PublishListResponse) Field3DeepEqual(src []*feeduser.Video) bool {
+func (p *PublishListResponse) Field3DeepEqual(src []*feed.Video) bool {
 
 	if len(p.VideoList) != len(src) {
 		return false

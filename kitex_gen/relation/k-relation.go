@@ -11,7 +11,7 @@ import (
 	"github.com/apache/thrift/lib/go/thrift"
 
 	"github.com/cloudwego/kitex/pkg/protocol/bthrift"
-	"tiktok-server/cmd/relation/kitex_gen/user"
+	"tiktok-server/kitex_gen/user"
 )
 
 // unused protection

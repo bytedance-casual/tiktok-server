@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
 	"strings"
-	"tiktok-server/kitex_gen/kitex_gen/user"
+	"tiktok-server/kitex_gen/user"
 )
 
 type FeedRequest struct {

@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	user2 "tiktok-server/kitex_gen/user"
 
 	"github.com/apache/thrift/lib/go/thrift"
 
 	"github.com/cloudwego/kitex/pkg/protocol/bthrift"
-	"tiktok-server/cmd/comment/kitex_gen/user"
 )
 
 // unused protection
@@ -22,7 +22,7 @@ var (
 	_ = reflect.Type(nil)
 	_ = thrift.TProtocol(nil)
 	_ = bthrift.BinaryWriter(nil)
-	_ = user.KitexUnusedProtection
+	_ = user2.KitexUnusedProtection
 )
 
 func (p *CommentActionRequest) FastRead(buf []byte) (int, error) {
@@ -1232,7 +1232,7 @@ func (p *Comment) FastReadField1(buf []byte) (int, error) {
 func (p *Comment) FastReadField2(buf []byte) (int, error) {
 	offset := 0
 
-	tmp := user.NewUser()
+	tmp := user2.NewUser()
 	if l, err := tmp.FastRead(buf[offset:]); err != nil {
 		return offset, err
 	} else {
