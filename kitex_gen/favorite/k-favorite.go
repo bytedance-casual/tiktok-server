@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	feed2 "tiktok-server/kitex_gen/feed"
 
 	"github.com/apache/thrift/lib/go/thrift"
 
 	"github.com/cloudwego/kitex/pkg/protocol/bthrift"
+	"tiktok-server/kitex_gen/feed"
 )
 
 // unused protection
@@ -22,7 +22,7 @@ var (
 	_ = reflect.Type(nil)
 	_ = thrift.TProtocol(nil)
 	_ = bthrift.BinaryWriter(nil)
-	_ = feed2.KitexUnusedProtection
+	_ = feed.KitexUnusedProtection
 )
 
 func (p *FavoriteActionRequest) FastRead(buf []byte) (int, error) {
@@ -804,9 +804,9 @@ func (p *FavoriteListResponse) FastReadField3(buf []byte) (int, error) {
 	if err != nil {
 		return offset, err
 	}
-	p.VideoList = make([]*feed2.Video, 0, size)
+	p.VideoList = make([]*feed.Video, 0, size)
 	for i := 0; i < size; i++ {
-		_elem := feed2.NewVideo()
+		_elem := feed.NewVideo()
 		if l, err := _elem.FastRead(buf[offset:]); err != nil {
 			return offset, err
 		} else {

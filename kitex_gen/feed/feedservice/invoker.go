@@ -4,7 +4,7 @@ package feedservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	"tiktok-server/kitex_gen/feed"
+	feed "tiktok-server/kitex_gen/feed"
 )
 
 // NewInvoker creates a server.Invoker with the given handler and options.

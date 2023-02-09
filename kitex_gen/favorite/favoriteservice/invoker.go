@@ -4,7 +4,7 @@ package favoriteservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	"tiktok-server/kitex_gen/favorite"
+	favorite "tiktok-server/kitex_gen/favorite"
 )
 
 // NewInvoker creates a server.Invoker with the given handler and options.

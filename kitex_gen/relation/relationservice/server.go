@@ -3,7 +3,7 @@ package relationservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	"tiktok-server/kitex_gen/relation"
+	relation "tiktok-server/kitex_gen/relation"
 )
 
 // NewServer creates a server.Server with the given handler and options.

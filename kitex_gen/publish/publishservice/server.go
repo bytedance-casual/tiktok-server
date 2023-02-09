@@ -3,7 +3,7 @@ package publishservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	"tiktok-server/kitex_gen/publish"
+	publish "tiktok-server/kitex_gen/publish"
 )
 
 // NewServer creates a server.Server with the given handler and options.

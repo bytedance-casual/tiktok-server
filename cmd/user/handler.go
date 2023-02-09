@@ -21,8 +21,8 @@ func (s *UserServiceImpl) User(ctx context.Context, req *user.UserRequest) (resp
 
 	users, err := service.NewUserService(ctx).User(req)
 	if err != nil {
-		errstr := err.Error()
-		resp = &user.UserResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errstr}
+		errStr := err.Error()
+		resp = &user.UserResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
 		return resp, nil
 	}
 	resp = &user.UserResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, User: users}
@@ -41,11 +41,11 @@ func (s *UserServiceImpl) RegisterUser(ctx context.Context, req *user.UserRegist
 
 	userId, token, err := service.NewCreateUserService(ctx).CreateUser(req)
 	if err != nil {
-		errstr := err.Error()
-		resp = &user.UserRegisterResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errstr}
+		errStr := err.Error()
+		resp = &user.UserRegisterResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
 		return resp, nil
 	}
-	resp = &user.UserRegisterResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, UserId: int64(userId), Token: token}
+	resp = &user.UserRegisterResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, UserId: userId, Token: token}
 	return resp, nil
 }
 
@@ -61,10 +61,30 @@ func (s *UserServiceImpl) LoginUser(ctx context.Context, req *user.UserLoginRequ
 
 	userId, token, err := service.NewCheckUserService(ctx).CheckUser(req)
 	if err != nil {
-		errstr := err.Error()
-		resp = &user.UserLoginResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errstr}
+		errStr := err.Error()
+		resp = &user.UserLoginResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
 		return resp, nil
 	}
-	resp = &user.UserLoginResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, UserId: int64(userId), Token: token}
+	resp = &user.UserLoginResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, UserId: userId, Token: token}
+	return resp, nil
+}
+
+// MGetUsers implements the UserServiceImpl interface.
+func (s *UserServiceImpl) MGetUsers(ctx context.Context, req *user.UsersMGetRequest) (resp *user.UsersMGetResponse, err error) {
+	// TODO: Your code here...
+	resp = new(user.UsersMGetResponse)
+
+	if req.UserId <= 0 || len(req.UserIdList) == 0 {
+		resp = &user.UsersMGetResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, nil
+	}
+
+	users, err := service.NewMGetUsersService(ctx).MGetUsers(req)
+	if err != nil {
+		errStr := err.Error()
+		resp = &user.UsersMGetResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
+		return resp, nil
+	}
+	resp = &user.UsersMGetResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, Users: users}
 	return resp, nil
 }

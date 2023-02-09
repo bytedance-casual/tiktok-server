@@ -6,7 +6,7 @@ import (
 	"context"
 	client "github.com/cloudwego/kitex/client"
 	kitex "github.com/cloudwego/kitex/pkg/serviceinfo"
-	"tiktok-server/kitex_gen/user"
+	user "tiktok-server/kitex_gen/user"
 )
 
 func serviceInfo() *kitex.ServiceInfo {
@@ -22,6 +22,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"User":         kitex.NewMethodInfo(userHandler, newUserServiceUserArgs, newUserServiceUserResult, false),
 		"RegisterUser": kitex.NewMethodInfo(registerUserHandler, newUserServiceRegisterUserArgs, newUserServiceRegisterUserResult, false),
 		"LoginUser":    kitex.NewMethodInfo(loginUserHandler, newUserServiceLoginUserArgs, newUserServiceLoginUserResult, false),
+		"MGetUsers":    kitex.NewMethodInfo(mGetUsersHandler, newUserServiceMGetUsersArgs, newUserServiceMGetUsersResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "user",
@@ -91,6 +92,24 @@ func newUserServiceLoginUserResult() interface{} {
 	return user.NewUserServiceLoginUserResult()
 }
 
+func mGetUsersHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*user.UserServiceMGetUsersArgs)
+	realResult := result.(*user.UserServiceMGetUsersResult)
+	success, err := handler.(user.UserService).MGetUsers(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newUserServiceMGetUsersArgs() interface{} {
+	return user.NewUserServiceMGetUsersArgs()
+}
+
+func newUserServiceMGetUsersResult() interface{} {
+	return user.NewUserServiceMGetUsersResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -126,6 +145,16 @@ func (p *kClient) LoginUser(ctx context.Context, req *user.UserLoginRequest) (r 
 	_args.Req = req
 	var _result user.UserServiceLoginUserResult
 	if err = p.c.Call(ctx, "LoginUser", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MGetUsers(ctx context.Context, req *user.UsersMGetRequest) (r *user.UsersMGetResponse, err error) {
+	var _args user.UserServiceMGetUsersArgs
+	_args.Req = req
+	var _result user.UserServiceMGetUsersResult
+	if err = p.c.Call(ctx, "MGetUsers", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

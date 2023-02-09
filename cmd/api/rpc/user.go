@@ -70,3 +70,14 @@ func LoginUser(ctx context.Context, req *user.UserLoginRequest) (*user.UserLogin
 	}
 	return resp, nil
 }
+
+func MGetUsers(ctx context.Context, req *user.UsersMGetRequest) (*user.UsersMGetResponse, error) {
+	resp, err := userClient.MGetUsers(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}

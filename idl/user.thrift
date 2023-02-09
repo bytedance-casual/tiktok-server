@@ -35,6 +35,17 @@ struct UserLoginResponse {
     4:required string token
 }
 
+struct UsersMGetRequest {
+    1:required i64 user_id            // 执行查询操作的用户 id
+    2:required list<i64> user_id_list // 需要查询的用户 id 列表
+}
+
+struct UsersMGetResponse {
+    1:required i32 status_code
+    2:optional string status_msg
+    3:required list<User> users
+}
+
 struct User {
     1:required i64 id
     2:required string name
@@ -47,4 +58,6 @@ service UserService {
     UserResponse User(1:required UserRequest req)
     UserRegisterResponse RegisterUser(1:required UserRegisterRequest req)
     UserLoginResponse LoginUser(1:required UserLoginRequest req)
+    // protect
+    UsersMGetResponse MGetUsers(1:required UsersMGetRequest req)
 }

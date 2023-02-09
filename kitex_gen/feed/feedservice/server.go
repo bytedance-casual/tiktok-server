@@ -3,7 +3,7 @@ package feedservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	"tiktok-server/kitex_gen/feed"
+	feed "tiktok-server/kitex_gen/feed"
 )
 
 // NewServer creates a server.Server with the given handler and options.

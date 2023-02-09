@@ -3,7 +3,7 @@ package commentservice
 
 import (
 	server "github.com/cloudwego/kitex/server"
-	"tiktok-server/kitex_gen/comment"
+	comment "tiktok-server/kitex_gen/comment"
 )
 
 // NewServer creates a server.Server with the given handler and options.
