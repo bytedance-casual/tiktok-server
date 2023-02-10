@@ -74,7 +74,8 @@ func (s *UserServiceImpl) MGetUsers(ctx context.Context, req *user.UsersMGetRequ
 	// TODO: Your code here...
 	resp = new(user.UsersMGetResponse)
 
-	if req.UserId <= 0 || len(req.UserIdList) == 0 {
+	// allows un-login user
+	if len(req.UserIdList) == 0 {
 		resp = &user.UsersMGetResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
 		return resp, nil
 	}
