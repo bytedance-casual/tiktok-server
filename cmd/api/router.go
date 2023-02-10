@@ -13,12 +13,12 @@ func initRouter(engine *gin.Engine) {
 	// basic apis
 	router.POST("/user/register/", handlers.RegisterUser)
 	router.POST("/user/login/", handlers.LoginUser)
+	router.GET("/feed/", handlers.Feed)
 
 	// jwt middleware
 	router.Use(middleware.JWTAuthMiddleware())
 
 	// 后续接口经由 jwt 校验，无需再校验 Token 字段
-	router.GET("/feed/", handlers.Feed)
 	router.GET("/user/", handlers.User)
 	router.POST("/publish/action/", handlers.ActionPublish)
 	router.GET("/publish/list/", handlers.ListPublish)
