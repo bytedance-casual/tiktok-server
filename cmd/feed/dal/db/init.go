@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	gormopentracing "gorm.io/plugin/opentracing"
 	"tiktok-server/internal/conf"
 	"tiktok-server/internal/model"
@@ -17,6 +18,7 @@ func Init() {
 		&gorm.Config{
 			PrepareStmt:            true,
 			SkipDefaultTransaction: true,
+			Logger: logger.Default.LogMode(logger.Info),
 		})
 	if err != nil {
 		panic(fmt.Errorf("open db:%w", err))
