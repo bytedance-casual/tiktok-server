@@ -22,7 +22,7 @@ func initFavoriteRPC() {
 		panic(err)
 	}
 	c, err := favoriteservice.NewClient(
-		conf.FavoriteService,
+		conf.FavoriteServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                       // mux

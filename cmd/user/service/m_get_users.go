@@ -28,7 +28,7 @@ func (s *MGetUsersService) MGetUsers(req *user.UsersMGetRequest) ([]*user.User, 
 		return nil, erren.UserNotExistErr
 	}
 
-	userList := make([]*user.User, 0)
+	userList := make([]*user.User, len(users))
 	for i, dbUser := range users {
 		// TODO move to rpc.ISFollow
 		isFollow, err := db.QueryIsFollow(s.ctx, req.UserId, int64(dbUser.ID))

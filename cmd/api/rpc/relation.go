@@ -22,7 +22,7 @@ func initRelationRPC() {
 		panic(err)
 	}
 	c, err := relationservice.NewClient(
-		conf.RelationService,
+		conf.RelationServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                       // mux

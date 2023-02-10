@@ -22,7 +22,7 @@ func initCommentRPC() {
 		panic(err)
 	}
 	c, err := commentservice.NewClient(
-		conf.CommentService,
+		conf.CommentServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                       // mux

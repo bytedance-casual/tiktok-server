@@ -22,7 +22,7 @@ func initMessageRPC() {
 		panic(err)
 	}
 	c, err := messageservice.NewClient(
-		conf.MessageService,
+		conf.MessageServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                       // mux
