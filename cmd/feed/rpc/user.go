@@ -81,3 +81,15 @@ func MGetUsers(ctx context.Context, req *user.UsersMGetRequest) (*user.UsersMGet
 	}
 	return resp, nil
 }
+
+func GetUserFromToken(ctx context.Context, token string) (*user.User, error) {
+	claims, err := middleware.ParseToken(token)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := User(ctx, &user.UserRequest{UserId: claims.ID, Token: token})
+	if err != nil {
+		return nil, err
+	}
+	return resp.User, nil
+}

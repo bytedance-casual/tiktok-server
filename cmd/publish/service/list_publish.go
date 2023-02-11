@@ -28,7 +28,7 @@ func (s *QueryVideoService) QueryVideo(req *publish.PublishListRequest, user *us
 	for i, video := range videos {
 		pVideos[i] = &feed.Video{
 			Id:            int64(video.ID),
-			Author:        &user,
+			Author:        user,
 			PlayUrl:       video.PlayUrl,
 			CoverUrl:      video.CoverUrl,
 			FavoriteCount: video.FavoriteCount,

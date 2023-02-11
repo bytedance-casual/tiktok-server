@@ -48,3 +48,48 @@ func User(ctx context.Context, req *user.UserRequest) (*user.UserResponse, error
 	}
 	return resp, nil
 }
+
+func RegisterUser(ctx context.Context, req *user.UserRegisterRequest) (*user.UserRegisterResponse, error) {
+	resp, err := userClient.RegisterUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+func LoginUser(ctx context.Context, req *user.UserLoginRequest) (*user.UserLoginResponse, error) {
+	resp, err := userClient.LoginUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+func MGetUsers(ctx context.Context, req *user.UsersMGetRequest) (*user.UsersMGetResponse, error) {
+	resp, err := userClient.MGetUsers(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+func GetUserFromToken(ctx context.Context, token string) (*user.User, error) {
+	claims, err := middleware.ParseToken(token)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := User(ctx, &user.UserRequest{UserId: claims.ID, Token: token})
+	if err != nil {
+		return nil, err
+	}
+	return resp.User, nil
+}

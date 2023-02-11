@@ -9,7 +9,6 @@ import (
 	"tiktok-server/cmd/publish/oss"
 	"tiktok-server/internal/conf"
 	"tiktok-server/kitex_gen/publish"
-	"tiktok-server/kitex_gen/user"
 )
 
 type UploadVideoService struct {
@@ -22,7 +21,7 @@ func NewUploadVideoService(ctx context.Context) *UploadVideoService {
 	}
 }
 
-func (s *UploadVideoService) UploadVideo(req *publish.PublishActionRequest, user *user.User) error {
+func (s *UploadVideoService) UploadVideo(req *publish.PublishActionRequest, userId int64) error {
 	uuidStr := uuid.NewV4().String()
 	videoName := uuidStr + ".mp4"
 	shotName := uuidStr + ".png"
@@ -53,7 +52,7 @@ func (s *UploadVideoService) UploadVideo(req *publish.PublishActionRequest, user
 
 	publicURL := conf.Config.OssAliyun.PublicURL
 	_, err = db.CreateVideo(&db.Video{
-		AuthorId: user.Id,
+		AuthorId: userId,
 		PlayUrl:  publicURL + videoName,
 		CoverUrl: publicURL + shotName,
 		Title:    req.Title,

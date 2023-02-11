@@ -7,7 +7,6 @@ import (
 	"tiktok-server/internal/erren"
 	"tiktok-server/internal/middleware"
 	"tiktok-server/kitex_gen/publish"
-	"tiktok-server/kitex_gen/user"
 )
 
 // PublishServiceImpl implements the last service interface defined in the IDL.
@@ -18,19 +17,19 @@ func (s *PublishServiceImpl) ActionPublish(ctx context.Context, req *publish.Pub
 	// TODO: Your code here...
 	resp = nil
 
-	if len(req.Token) == 0 || len(req.Data) == 0 || len(req.Title) == 0 {
+	if len(req.Data) == 0 || len(req.Title) == 0 {
 		resp = &publish.PublishActionResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
 		return resp, err
 	}
 
-	tokenUser, err := getUserFromToken(req.Token, ctx)
+	claims, err := middleware.ParseToken(req.Token)
 	if err != nil {
 		errMsg := err.Error()
 		resp = &publish.PublishActionResponse{StatusCode: erren.AuthorizationFailedErr.ErrCode, StatusMsg: &errMsg}
 		return resp, err
 	}
 
-	err = service.NewUploadVideoService(ctx).UploadVideo(req, tokenUser)
+	err = service.NewUploadVideoService(ctx).UploadVideo(req, claims.ID)
 	if err != nil {
 		errMsg := err.Error()
 		resp = &publish.PublishActionResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errMsg}
@@ -46,12 +45,12 @@ func (s *PublishServiceImpl) ListPublish(ctx context.Context, req *publish.Publi
 	// TODO: Your code here...
 	resp = nil
 
-	if len(req.Token) == 0 || req.UserId <= 0 {
+	if req.UserId <= 0 {
 		resp = &publish.PublishListResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
 		return resp, err
 	}
 
-	tokenUser, err := getUserFromToken(req.Token, ctx)
+	tokenUser, err := rpc.GetUserFromToken(ctx, req.Token)
 	if err != nil {
 		errMsg := err.Error()
 		resp = &publish.PublishListResponse{StatusCode: erren.AuthorizationFailedErr.ErrCode, StatusMsg: &errMsg}
@@ -67,16 +66,4 @@ func (s *PublishServiceImpl) ListPublish(ctx context.Context, req *publish.Publi
 
 	resp = &publish.PublishListResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, VideoList: videoList}
 	return resp, nil
-}
-
-func getUserFromToken(token string, ctx context.Context) (*user.User, error) {
-	claims, err := middleware.ParseToken(token)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := rpc.User(ctx, &user.UserRequest{UserId: claims.ID, Token: token})
-	if err != nil {
-		return nil, err
-	}
-	return resp.User, nil
 }
