@@ -33,6 +33,7 @@ const (
 	AuthorizationFailedErrCode = 10003
 	UserAlreadyExistErrCode    = 10004
 	UserNotExistErrCode        = 10005
+	TypeNotSupportErrCode      = 10006
 )
 
 type ErrEn struct {
@@ -71,6 +72,7 @@ var (
 	AuthorizationFailedErr = NewErrNo(AuthorizationFailedErrCode, "Authorization failed")
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User Already Exist")
 	UserNotExistErr        = NewErrNo(UserNotExistErrCode, "User Not Exist")
+	TypeNotSupportErr      = NewErrNo(TypeNotSupportErrCode, "Type Not Support")
 )
 
 // ConvertErr convert error to ErrEn
