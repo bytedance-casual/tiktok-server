@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
@@ -22,9 +21,7 @@ func ActionPublish(c *gin.Context) {
 		return
 	}
 
-	// gin 貌似没有配套上下文参数，暂时手动创建
-	ctx := context.Background()
-	resp, err := rpc.ActionPublish(ctx, &request)
+	resp, err := rpc.ActionPublish(c.Request.Context(), &request)
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return

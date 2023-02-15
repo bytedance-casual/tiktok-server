@@ -1,16 +1,20 @@
 package handlers
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
 	"tiktok-server/kitex_gen/relation"
 )
 
+type RelationFriendListRequest struct {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
 // ListFriendRelation 所有关注登录用户的粉丝列表
 func ListFriendRelation(c *gin.Context) {
-	var request relation.RelationFriendListRequest
+	var request RelationFriendListRequest
 	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
@@ -21,9 +25,10 @@ func ListFriendRelation(c *gin.Context) {
 		return
 	}
 
-	// gin 貌似没有配套上下文参数，暂时手动创建
-	ctx := context.Background()
-	resp, err := rpc.ListFriendRelation(ctx, &request)
+	resp, err := rpc.ListFriendRelation(c.Request.Context(), &relation.RelationFriendListRequest{
+		UserId: request.UserId,
+		Token:  request.Token,
+	})
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return

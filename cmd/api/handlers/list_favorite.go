@@ -1,16 +1,20 @@
 package handlers
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
 	"tiktok-server/kitex_gen/favorite"
 )
 
+type FavoriteListRequest struct {
+	UserId int64  `form:"user_id"`
+	Token  string `form:"token"`
+}
+
 // ListFavorite 登录用户的所有点赞视频
 func ListFavorite(c *gin.Context) {
-	var request favorite.FavoriteListRequest
+	var request FavoriteListRequest
 	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
@@ -21,9 +25,10 @@ func ListFavorite(c *gin.Context) {
 		return
 	}
 
-	// gin 貌似没有配套上下文参数，暂时手动创建
-	ctx := context.Background()
-	resp, err := rpc.ListFavorite(ctx, &request)
+	resp, err := rpc.ListFavorite(c.Request.Context(), &favorite.FavoriteListRequest{
+		UserId: request.UserId,
+		Token:  request.Token,
+	})
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return
