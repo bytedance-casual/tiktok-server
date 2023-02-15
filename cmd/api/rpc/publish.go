@@ -59,3 +59,14 @@ func ListPublish(ctx context.Context, req *publish.PublishListRequest) (*publish
 	}
 	return resp, nil
 }
+
+func VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest) (*publish.PublishVideoActionResponse, error) {
+	resp, err := publishClient.VideoActionPublish(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}
