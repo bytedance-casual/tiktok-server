@@ -36,15 +36,15 @@ func (s *GetFeedService) GetFeedInfo(req *feed.FeedRequest, userId int64) ([]*fe
 		userIdList[i] = video.AuthorId
 	}
 
+	// TODO 整体事务
 	resp, err := rpc.MGetUsers(s.ctx, &user.UsersMGetRequest{UserId: userId, UserIdList: userIdList})
 	if err != nil {
 		return nil, 0, err
 	}
 
 	users := resp.Users
-	fVideos := make([]*feed.Video, len(videos))
 	for i, video := range videos {
-		fVideos[i] = &feed.Video{
+		videoList = append(videoList, &feed.Video{
 			Id:            int64(video.ID),
 			Author:        users[i],
 			PlayUrl:       video.PlayUrl,
@@ -52,9 +52,9 @@ func (s *GetFeedService) GetFeedInfo(req *feed.FeedRequest, userId int64) ([]*fe
 			FavoriteCount: video.FavoriteCount,
 			CommentCount:  video.CommentCount,
 			Title:         video.Title,
-		}
+		})
 	}
 
 	nextTime := videos[len(videos)-1].UpdatedAt.UnixMilli()
-	return fVideos, nextTime, nil
+	return videoList, nextTime, nil
 }
