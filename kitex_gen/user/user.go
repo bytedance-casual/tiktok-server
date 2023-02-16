@@ -2407,7 +2407,7 @@ func (p *UsersMGetResponse) Field3DeepEqual(src []*User) bool {
 
 type User struct {
 	Id            int64  `thrift:"id,1,required" frugal:"1,required,i64" json:"id"`
-	Name          string `thrift:"name,2,required" frugal:"2,required,string" json:"name"`
+	Name          string `thrift:"name,2,required" frugal:"2,required,string" json:"name" gorm:"column:username"`
 	FollowCount   int64  `thrift:"follow_count,3,required" frugal:"3,required,i64" json:"follow_count"`
 	FollowerCount int64  `thrift:"follower_count,4,required" frugal:"4,required,i64" json:"follower_count"`
 	IsFollow      bool   `thrift:"is_follow,5,required" frugal:"5,required,bool" json:"is_follow"`
