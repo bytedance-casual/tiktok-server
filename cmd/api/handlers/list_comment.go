@@ -1,16 +1,20 @@
 package handlers
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
 	"tiktok-server/kitex_gen/comment"
 )
 
+type CommentListRequest struct {
+	Token   string `form:"token"`
+	VideoId int64  `form:"video_id"`
+}
+
 // ListComment 查看视频的所有评论，按发布时间倒序
 func ListComment(c *gin.Context) {
-	var request comment.CommentListRequest
+	var request CommentListRequest
 	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
@@ -21,9 +25,10 @@ func ListComment(c *gin.Context) {
 		return
 	}
 
-	// gin 貌似没有配套上下文参数，暂时手动创建
-	ctx := context.Background()
-	resp, err := rpc.ListComment(ctx, &request)
+	resp, err := rpc.ListComment(c.Request.Context(), &comment.CommentListRequest{
+		Token:   request.Token,
+		VideoId: request.VideoId,
+	})
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return

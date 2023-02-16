@@ -1,16 +1,20 @@
 package handlers
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
 	"tiktok-server/kitex_gen/message"
 )
 
+type MessageChatRequest struct {
+	Token    string `form:"token"`
+	ToUserId int64  `form:"to_user_id"`
+}
+
 // ChatMessage 当前登录用户和其他指定用户的聊天消息记录
 func ChatMessage(c *gin.Context) {
-	var request message.MessageChatRequest
+	var request MessageChatRequest
 	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
@@ -21,9 +25,10 @@ func ChatMessage(c *gin.Context) {
 		return
 	}
 
-	// gin 貌似没有配套上下文参数，暂时手动创建
-	ctx := context.Background()
-	resp, err := rpc.ChatMessage(ctx, &request)
+	resp, err := rpc.ChatMessage(c.Request.Context(), &message.MessageChatRequest{
+		Token:    request.Token,
+		ToUserId: request.ToUserId,
+	})
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return

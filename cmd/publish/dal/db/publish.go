@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"gorm.io/gorm"
+	"tiktok-server/internal/utils"
 )
 
 type Video struct {
@@ -30,4 +31,18 @@ func QueryVideo(userId int64, ctx context.Context) ([]*Video, error) {
 		return nil, err
 	}
 	return resp, nil
+}
+
+// UpdateVideoFavorite update video favorite number by (increase ? +1 : -1)
+func UpdateVideoFavorite(videoId int64, increase bool, ctx context.Context) error {
+	opt := utils.Ternary(increase, "favorite_count + ?", "favorite_count - ?")
+	result := DB.WithContext(ctx).Model(&Video{}).Where("id = ?", videoId).Update("favorite_count", gorm.Expr(opt, 1))
+	return result.Error
+}
+
+// UpdateVideoComment update video comment number by (increase ? +1 : -1)
+func UpdateVideoComment(videoId int64, increase bool, ctx context.Context) error {
+	opt := utils.Ternary(increase, "comment_count + ?", "comment_count - ?")
+	result := DB.WithContext(ctx).Model(&Video{}).Where("id = ?", videoId).Update("comment_count", gorm.Expr(opt, 1))
+	return result.Error
 }

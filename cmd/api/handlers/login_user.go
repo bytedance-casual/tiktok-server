@@ -1,16 +1,20 @@
 package handlers
 
 import (
-	"context"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
 	"tiktok-server/internal/erren"
 	"tiktok-server/kitex_gen/user"
 )
 
+type UserLoginRequest struct {
+	Username string `form:"username"`
+	Password string `form:"password"`
+}
+
 // LoginUser 用户登录
 func LoginUser(c *gin.Context) {
-	var request user.UserLoginRequest
+	var request UserLoginRequest
 	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
@@ -21,9 +25,10 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-	// gin 貌似没有配套上下文参数，暂时手动创建
-	ctx := context.Background()
-	resp, err := rpc.LoginUser(ctx, &request)
+	resp, err := rpc.LoginUser(c.Request.Context(), &user.UserLoginRequest{
+		Username: request.Username,
+		Password: request.Password,
+	})
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return

@@ -9,20 +9,20 @@ import (
 	"tiktok-server/internal/conf"
 	"tiktok-server/internal/erren"
 	"tiktok-server/internal/middleware"
-	"tiktok-server/kitex_gen/publish"
-	"tiktok-server/kitex_gen/publish/publishservice"
+	"tiktok-server/kitex_gen/user"
+	"tiktok-server/kitex_gen/user/userservice"
 	"time"
 )
 
-var publishClient publishservice.Client
+var userClient userservice.Client
 
-func initPublishRPC() {
+func initUserRPC() {
 	r, err := etcd.NewEtcdResolver([]string{conf.EtcdAddress})
 	if err != nil {
 		panic(err)
 	}
-	c, err := publishservice.NewClient(
-		conf.PublishServiceName,
+	c, err := userservice.NewClient(
+		conf.UserServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                       // mux
@@ -35,11 +35,11 @@ func initPublishRPC() {
 	if err != nil {
 		panic(err)
 	}
-	publishClient = c
+	userClient = c
 }
 
-func ActionPublish(ctx context.Context, req *publish.PublishActionRequest) (*publish.PublishActionResponse, error) {
-	resp, err := publishClient.ActionPublish(ctx, req)
+func User(ctx context.Context, req *user.UserRequest) (*user.UserResponse, error) {
+	resp, err := userClient.User(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -49,8 +49,8 @@ func ActionPublish(ctx context.Context, req *publish.PublishActionRequest) (*pub
 	return resp, nil
 }
 
-func ListPublish(ctx context.Context, req *publish.PublishListRequest) (*publish.PublishListResponse, error) {
-	resp, err := publishClient.ListPublish(ctx, req)
+func RegisterUser(ctx context.Context, req *user.UserRegisterRequest) (*user.UserRegisterResponse, error) {
+	resp, err := userClient.RegisterUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -60,8 +60,8 @@ func ListPublish(ctx context.Context, req *publish.PublishListRequest) (*publish
 	return resp, nil
 }
 
-func VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest) (*publish.PublishVideoActionResponse, error) {
-	resp, err := publishClient.VideoActionPublish(ctx, req)
+func LoginUser(ctx context.Context, req *user.UserLoginRequest) (*user.UserLoginResponse, error) {
+	resp, err := userClient.LoginUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -69,4 +69,27 @@ func VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequ
 		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
 	}
 	return resp, nil
+}
+
+func MGetUsers(ctx context.Context, req *user.UsersMGetRequest) (*user.UsersMGetResponse, error) {
+	resp, err := userClient.MGetUsers(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}
+
+func GetUserFromToken(ctx context.Context, token string) (*user.User, error) {
+	claims, err := middleware.ParseToken(token)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := User(ctx, &user.UserRequest{UserId: claims.ID, Token: token})
+	if err != nil {
+		return nil, err
+	}
+	return resp.User, nil
 }

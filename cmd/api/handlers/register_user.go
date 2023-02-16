@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/rpc"
@@ -9,23 +8,29 @@ import (
 	"tiktok-server/kitex_gen/user"
 )
 
+type UserRegisterRequest struct {
+	Username string `form:"username"`
+	Password string `form:"password"`
+}
+
 // RegisterUser 注册用户
 func RegisterUser(c *gin.Context) {
-	var request user.UserRegisterRequest
+	var request UserRegisterRequest
 	if err := c.ShouldBind(&request); err != nil {
 		BadResponse(c, err)
 		return
 	}
-	//fmt.Println(c.Query("username"))
+
 	fmt.Println(request)
 	if len(request.Username) == 0 || len(request.Password) == 0 {
 		BadResponse(c, erren.ParamErr)
 		return
 	}
 
-	// gin 貌似没有配套上下文参数，暂时手动创建
-	ctx := context.Background()
-	resp, err := rpc.RegisterUser(ctx, &request)
+	resp, err := rpc.RegisterUser(c.Request.Context(), &user.UserRegisterRequest{
+		Username: request.Username,
+		Password: request.Password,
+	})
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
 		return
