@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"tiktok-server/kitex_gen/user"
 	//"github.com/cloudwego/kitex-examples/bizdemo/easy_note/pkg/constants"
 	"gorm.io/gorm"
 )
@@ -21,23 +20,21 @@ type Follow struct {
 	IsFollow       int    `json:"is_follow"`
 }
 
-/*
 type UserInfoResp struct {
 	FollowCount   int64  `json:"follow_count"`                    // 关注总数
 	FollowerCount int64  `json:"follower_count"`                  // 粉丝总数
 	Id            int64  `json:"id"`                              // 用户id，和db.user不同
-	IsFollow      int    `json:"is_follow"`                       // true-已关注，false-未关注
+	IsFollow      bool   `json:"is_follow"`                       // true-已关注，false-未关注
 	Name          string `json:"username" gorm:"column:username"` // 用户名称
 }
-*/
 
 func (f *Follow) TableName() string {
 	return "follows"
 }
 
 // 查询粉丝列表 -连表查询 -返回粉丝信息
-func QueryFollowerList(ctx context.Context, userID int64) ([]*user.User, error) {
-	res := make([]*user.User, 0)
+func QueryFollowerList(ctx context.Context, userID int64) ([]*UserInfoResp, error) {
+	res := make([]*UserInfoResp, 0)
 	if userID == 0 {
 		return res, nil
 	}
@@ -53,8 +50,8 @@ func QueryFollowerList(ctx context.Context, userID int64) ([]*user.User, error) 
 }
 
 // 查询关注列表--连表查询 -返回偶像信息
-func QueryFollowList(ctx context.Context, userID int64) ([]*user.User, error) {
-	res := make([]*user.User, 0)
+func QueryFollowList(ctx context.Context, userID int64) ([]*UserInfoResp, error) {
+	res := make([]*UserInfoResp, 0)
 
 	if userID == 0 {
 		return res, nil
