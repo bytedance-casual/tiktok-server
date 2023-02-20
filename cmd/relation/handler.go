@@ -12,7 +12,23 @@ type RelationServiceImpl struct{}
 
 // ActionRelation implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) ActionRelation(ctx context.Context, req *relation.RelationActionRequest) (resp *relation.RelationActionResponse, err error) {
-	// TODO: Your code here...
+	resp = &relation.RelationActionResponse{
+		StatusCode: erren.SuccessCode,
+		StatusMsg:  nil,
+	}
+	if req.ToUserId <= 0 || len(req.Token) == 0 || (req.ActionType != 0 && req.ActionType != 1) {
+		resp = &relation.RelationActionResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, nil
+	}
+	err = service.NewActionRelationService(ctx).Follow(req)
+	if err != nil {
+		msg := err.Error()
+		resp = &relation.RelationActionResponse{
+			StatusCode: erren.ServiceErr.ErrCode,
+			StatusMsg:  &msg,
+		}
+		return
+	}
 	return
 }
 
