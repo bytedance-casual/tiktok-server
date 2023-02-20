@@ -24,8 +24,9 @@ import (
 // example: if _,ok := erren.ErrorMap[10001]; ok{}
 // 返回ok=true，10001在错误代码组，false则不在
 
-var ErrorMap = map[int32]struct{}{10001: {}, 10002: {}, 10003: {}, 10004: {}, 10005: {}}
+var ErrorMap = map[int32]struct{}{10001: {}, 10002: {}, 10003: {}, 10004: {}, 10005: {}, 10006: {}}
 
+// 新增错误后也需要添加到ErrorMap
 const (
 	SuccessCode                = 0
 	ServiceErrCode             = 10001
