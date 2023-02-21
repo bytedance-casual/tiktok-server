@@ -43,7 +43,7 @@ struct UsersMGetRequest {
 struct UsersMGetResponse {
     1:required i32 status_code
     2:optional string status_msg
-    3:required list<User> users
+    3:required map<i64, User> users
 }
 
 struct User {

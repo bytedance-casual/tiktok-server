@@ -13,6 +13,8 @@ import (
 type Client interface {
 	ActionFavorite(ctx context.Context, req *favorite.FavoriteActionRequest, callOptions ...callopt.Option) (r *favorite.FavoriteActionResponse, err error)
 	ListFavorite(ctx context.Context, req *favorite.FavoriteListRequest, callOptions ...callopt.Option) (r *favorite.FavoriteListResponse, err error)
+	MCheckFavorite(ctx context.Context, req *favorite.MCheckFavoriteRequest, callOptions ...callopt.Option) (r *favorite.MCheckFavoriteResponse, err error)
+	MCountFavorite(ctx context.Context, req *favorite.MCountVideoFavoriteRequest, callOptions ...callopt.Option) (r *favorite.MCountVideoFavoriteResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -52,4 +54,14 @@ func (p *kFavoriteServiceClient) ActionFavorite(ctx context.Context, req *favori
 func (p *kFavoriteServiceClient) ListFavorite(ctx context.Context, req *favorite.FavoriteListRequest, callOptions ...callopt.Option) (r *favorite.FavoriteListResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.ListFavorite(ctx, req)
+}
+
+func (p *kFavoriteServiceClient) MCheckFavorite(ctx context.Context, req *favorite.MCheckFavoriteRequest, callOptions ...callopt.Option) (r *favorite.MCheckFavoriteResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.MCheckFavorite(ctx, req)
+}
+
+func (p *kFavoriteServiceClient) MCountFavorite(ctx context.Context, req *favorite.MCountVideoFavoriteRequest, callOptions ...callopt.Option) (r *favorite.MCountVideoFavoriteResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.MCountFavorite(ctx, req)
 }

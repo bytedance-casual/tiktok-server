@@ -5,8 +5,8 @@ import (
 	"tiktok-server/cmd/comment/rpc"
 	"tiktok-server/cmd/comment/service"
 	"tiktok-server/internal/erren"
+	"tiktok-server/internal/middleware"
 	"tiktok-server/kitex_gen/comment"
-	"tiktok-server/kitex_gen/publish"
 )
 
 // CommentServiceImpl implements the last service interface defined in the IDL.
@@ -49,12 +49,16 @@ func (s *CommentServiceImpl) ListComment(ctx context.Context, req *comment.Comme
 		return resp, nil
 	}
 
-	user, err := rpc.GetUserFromToken(ctx, req.Token)
-	if err != nil {
-		return nil, err
+	var userId int64
+	if len(req.Token) != 0 {
+		claims, err := middleware.ParseToken(req.Token)
+		if err != nil {
+			return nil, err
+		}
+		userId = claims.ID
 	}
 
-	comments, err := service.NewQueryCommentService(ctx).QueryComment(req, user.Id)
+	comments, err := service.NewQueryCommentService(ctx).QueryComment(req, userId)
 	if err != nil {
 		errStr := err.Error()
 		resp = &comment.CommentListResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
@@ -78,16 +82,6 @@ func doActionComment1(ctx context.Context, req *comment.CommentActionRequest) (r
 
 	// TODO 整体事务
 	dbComment, err := service.NewActionCommentService(ctx).CreateComment(req, user.Id)
-	if err != nil {
-		return nil, err
-	}
-
-	// refresh video data
-	_, err = rpc.VideoActionPublish(ctx, &publish.PublishVideoActionRequest{
-		VideoId:    req.VideoId,
-		ActionType: 2,
-		Increase:   true,
-	})
 	if err != nil {
 		return nil, err
 	}
@@ -117,16 +111,27 @@ func doActionComment2(ctx context.Context, req *comment.CommentActionRequest) (r
 		return nil, err
 	}
 
-	// refresh video data
-	_, err = rpc.VideoActionPublish(ctx, &publish.PublishVideoActionRequest{
-		VideoId:    req.VideoId,
-		ActionType: 2,
-		Increase:   false,
-	})
-	if err != nil {
-		return nil, err
+	resp = &comment.CommentActionResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg}
+	return resp, nil
+}
+
+// MCountVideoComment implements the CommentServiceImpl interface.
+func (s *CommentServiceImpl) MCountVideoComment(ctx context.Context, req *comment.MCountVideoCommentRequest) (resp *comment.MCountVideoCommentResponse, err error) {
+	// TODO: Your code here...
+	resp = nil
+
+	if len(req.VideoIdList) == 0 {
+		resp = &comment.MCountVideoCommentResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, nil
 	}
 
-	resp = &comment.CommentActionResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg}
+	countList, err := service.NewMCountVideoCommentService(ctx).MCount(req)
+	if err != nil {
+		errStr := err.Error()
+		resp = &comment.MCountVideoCommentResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
+		return resp, err
+	}
+
+	resp = &comment.MCountVideoCommentResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, CountList: countList}
 	return resp, nil
 }

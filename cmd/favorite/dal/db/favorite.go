@@ -3,107 +3,88 @@ package db
 import (
 	"context"
 	"gorm.io/gorm"
-	"tiktok-server/internal/erren"
+	"tiktok-server/cmd/favorite/rpc"
+	"tiktok-server/internal/utils"
 	"tiktok-server/kitex_gen/feed"
-	user2 "tiktok-server/kitex_gen/user"
+	"tiktok-server/kitex_gen/publish"
 )
 
-type Favorite struct {
+type Like struct {
 	gorm.Model
 	UserId  int64 `json:"user_id"`
 	VideoId int64 `json:"video_id"`
 }
 
-func (f *Favorite) TableName() string {
-	return "favorite"
+func (f *Like) TableName() string {
+	return "likes"
 }
 
-// GetFavoriteRelation 获取用户视频
-func GetFavoriteRelation(ctx context.Context, uid int64, vid int64) (*feed.Video, error) {
-	user := new(user2.User)
-	if err := DB.WithContext(ctx).First(user, uid).Error; err != nil {
+// AddFavorite 点赞操作
+func AddFavorite(like *Like, ctx context.Context) (int64, error) {
+	result := DB.WithContext(ctx).Create(like)
+	return int64(like.ID), result.Error
+}
+
+// CancelFavorite 取消点赞操作
+func CancelFavorite(like *Like, ctx context.Context) error {
+	result := DB.WithContext(ctx).Where("user_id = ? AND video_id = ?", like.UserId, like.VideoId).Delete(like)
+	return result.Error
+}
+
+// ListFavorite 返回userid用户点赞的视频列表
+func ListFavorite(userId int64, ctx context.Context) ([]*feed.Video, error) {
+	resp := make([]*Like, 0)
+	if err := DB.WithContext(ctx).Where("user_id = ?", userId).Find(&resp).Error; err != nil {
 		return nil, err
 	}
 
-	video := new(feed.Video)
-	if err := DB.WithContext(ctx).Model(&user).Association("FavoriteVideos").Find(&video, vid); err != nil {
-		return nil, err
+	videoIdList := make([]int64, len(resp))
+	for i, like := range resp {
+		videoIdList[i] = like.VideoId
 	}
-	return video, nil
-}
 
-// AddFavoriteAction 点赞操作
-func AddFavoriteAction(ctx context.Context, userId int64, videoId int64) error {
-	favorite := Favorite{
-		UserId:  userId,
-		VideoId: videoId,
-	}
-	//用户视频点赞数
-	var cnt int64 = 0
-	err := DB.WithContext(ctx).Model(&Favorite{}).Where("user_id = ? and video_id = ?", userId, videoId).Count(&cnt).Error
+	countList, err := MCountFavorite(videoIdList, ctx)
 	if err != nil {
-		return err
-	}
-	if cnt != 0 {
-		return nil
-	}
-
-	return DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.WithContext(ctx).Create(&favorite).Error; err != nil {
-			return err
-		}
-		if err := DB.WithContext(ctx).Model(&feed.Video{}).Where("id = ?", videoId).Update("favorite_count", gorm.Expr("favorite_count + ?", 1)).Error; err != nil {
-			return err
-		}
-		return nil
-	})
-}
-
-// CancelFavoriteAction 取消点赞操作
-func CancelFavoriteAction(ctx context.Context, userId int64, videoId int64) error {
-	err := DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		//删除点赞数据
-		user := new(user2.User)
-		if err := tx.WithContext(ctx).First(user, userId).Error; err != nil {
-			return err
-		}
-
-		video, err := GetFavoriteRelation(ctx, userId, videoId)
-		if err != nil {
-			return err
-		}
-
-		err = tx.Unscoped().WithContext(ctx).Model(&user).Association("FavoriteVideos").Delete(video)
-		if err != nil {
-			return err
-		}
-
-		//改变 video 表中的 favorite count
-		res := tx.Model(video).Update("favorite_count", gorm.Expr("favorite_count - ?", 1))
-		if res.Error != nil {
-			return res.Error
-		}
-
-		if res.RowsAffected != 1 {
-			return erren.ParamErr
-		}
-
-		return nil
-	})
-	return err
-}
-
-// FavoriteList 返回userid用户点赞的视频列表
-func FavoriteList(ctx context.Context, uid int64) ([]*feed.Video, error) {
-	user := new(user2.User)
-	if err := DB.WithContext(ctx).First(user, uid).Error; err != nil {
 		return nil, err
 	}
 
-	//videos := []feed.Video{}
-	videos := make([]*feed.Video, 0)
-	if err := DB.WithContext(ctx).Model(&user).Association("FavoriteVideos").Find(&videos); err != nil {
+	mresp, err := rpc.MGetVideos(ctx, &publish.VideosMGetRequest{
+		UserId:      userId,
+		VideoIdList: videoIdList,
+	})
+	if err != nil {
 		return nil, err
 	}
-	return videos, nil
+
+	for i, video := range mresp.Videos {
+		video.IsFavorite = true
+		video.FavoriteCount = countList[i]
+	}
+	return mresp.Videos, nil
+}
+
+func MCountFavorite(videoIdList []int64, ctx context.Context) ([]int64, error) {
+	countList := make([]int64, len(videoIdList))
+	for i, videoId := range videoIdList {
+		if err := DB.WithContext(ctx).Model(&Like{}).Where("video_id = ?", videoId).Count(&countList[i]).Error; err != nil {
+			return nil, err
+		}
+	}
+	return countList, nil
+}
+
+func MCheckFavorite(userId int64, videoIdList []int64, ctx context.Context) ([]bool, error) {
+	set := utils.NewSet[int64]()
+	likes := make([]*Like, 0)
+	if err := DB.WithContext(ctx).Where("user_id = ? AND video_id IN ?", userId, videoIdList).Find(&likes).Error; err != nil {
+		return nil, err
+	}
+	for _, like := range likes {
+		set.Add(like.VideoId)
+	}
+	boolList := make([]bool, len(videoIdList))
+	for i, videoId := range videoIdList {
+		boolList[i] = set.Contains(videoId)
+	}
+	return boolList, nil
 }

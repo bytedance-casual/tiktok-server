@@ -2068,9 +2068,9 @@ func (p *UsersMGetRequest) Field2DeepEqual(src []int64) bool {
 }
 
 type UsersMGetResponse struct {
-	StatusCode int32   `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
-	StatusMsg  *string `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
-	Users      []*User `thrift:"users,3,required" frugal:"3,required,list<User>" json:"users"`
+	StatusCode int32           `thrift:"status_code,1,required" frugal:"1,required,i32" json:"status_code"`
+	StatusMsg  *string         `thrift:"status_msg,2,optional" frugal:"2,optional,string" json:"status_msg,omitempty"`
+	Users      map[int64]*User `thrift:"users,3,required" frugal:"3,required,map<i64:User>" json:"users"`
 }
 
 func NewUsersMGetResponse() *UsersMGetResponse {
@@ -2094,7 +2094,7 @@ func (p *UsersMGetResponse) GetStatusMsg() (v string) {
 	return *p.StatusMsg
 }
 
-func (p *UsersMGetResponse) GetUsers() (v []*User) {
+func (p *UsersMGetResponse) GetUsers() (v map[int64]*User) {
 	return p.Users
 }
 func (p *UsersMGetResponse) SetStatusCode(val int32) {
@@ -2103,7 +2103,7 @@ func (p *UsersMGetResponse) SetStatusCode(val int32) {
 func (p *UsersMGetResponse) SetStatusMsg(val *string) {
 	p.StatusMsg = val
 }
-func (p *UsersMGetResponse) SetUsers(val []*User) {
+func (p *UsersMGetResponse) SetUsers(val map[int64]*User) {
 	p.Users = val
 }
 
@@ -2160,7 +2160,7 @@ func (p *UsersMGetResponse) Read(iprot thrift.TProtocol) (err error) {
 				}
 			}
 		case 3:
-			if fieldTypeId == thrift.LIST {
+			if fieldTypeId == thrift.MAP {
 				if err = p.ReadField3(iprot); err != nil {
 					goto ReadFieldError
 				}
@@ -2230,20 +2230,26 @@ func (p *UsersMGetResponse) ReadField2(iprot thrift.TProtocol) error {
 }
 
 func (p *UsersMGetResponse) ReadField3(iprot thrift.TProtocol) error {
-	_, size, err := iprot.ReadListBegin()
+	_, _, size, err := iprot.ReadMapBegin()
 	if err != nil {
 		return err
 	}
-	p.Users = make([]*User, 0, size)
+	p.Users = make(map[int64]*User, size)
 	for i := 0; i < size; i++ {
-		_elem := NewUser()
-		if err := _elem.Read(iprot); err != nil {
+		var _key int64
+		if v, err := iprot.ReadI64(); err != nil {
+			return err
+		} else {
+			_key = v
+		}
+		_val := NewUser()
+		if err := _val.Read(iprot); err != nil {
 			return err
 		}
 
-		p.Users = append(p.Users, _elem)
+		p.Users[_key] = _val
 	}
-	if err := iprot.ReadListEnd(); err != nil {
+	if err := iprot.ReadMapEnd(); err != nil {
 		return err
 	}
 	return nil
@@ -2323,18 +2329,23 @@ WriteFieldEndError:
 }
 
 func (p *UsersMGetResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if err = oprot.WriteFieldBegin("users", thrift.LIST, 3); err != nil {
+	if err = oprot.WriteFieldBegin("users", thrift.MAP, 3); err != nil {
 		goto WriteFieldBeginError
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Users)); err != nil {
+	if err := oprot.WriteMapBegin(thrift.I64, thrift.STRUCT, len(p.Users)); err != nil {
 		return err
 	}
-	for _, v := range p.Users {
+	for k, v := range p.Users {
+
+		if err := oprot.WriteI64(k); err != nil {
+			return err
+		}
+
 		if err := v.Write(oprot); err != nil {
 			return err
 		}
 	}
-	if err := oprot.WriteListEnd(); err != nil {
+	if err := oprot.WriteMapEnd(); err != nil {
 		return err
 	}
 	if err = oprot.WriteFieldEnd(); err != nil {
@@ -2391,13 +2402,13 @@ func (p *UsersMGetResponse) Field2DeepEqual(src *string) bool {
 	}
 	return true
 }
-func (p *UsersMGetResponse) Field3DeepEqual(src []*User) bool {
+func (p *UsersMGetResponse) Field3DeepEqual(src map[int64]*User) bool {
 
 	if len(p.Users) != len(src) {
 		return false
 	}
-	for i, v := range p.Users {
-		_src := src[i]
+	for k, v := range p.Users {
+		_src := src[k]
 		if !v.DeepEqual(_src) {
 			return false
 		}

@@ -9,6 +9,7 @@ import (
 	trace "github.com/kitex-contrib/tracer-opentracing"
 	"net"
 	"tiktok-server/cmd/favorite/dal"
+	"tiktok-server/cmd/favorite/rpc"
 	"tiktok-server/internal/bound"
 	"tiktok-server/internal/conf"
 	"tiktok-server/internal/middleware"
@@ -20,6 +21,7 @@ func Init() {
 	conf.Init()
 	tracer.InitJaeger(conf.FavoriteServiceName)
 	dal.Init()
+	rpc.InitRPC()
 }
 
 func main() {

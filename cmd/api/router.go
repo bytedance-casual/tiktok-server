@@ -15,6 +15,9 @@ func initRouter(engine *gin.Engine) {
 	router.POST("/user/login/", handlers.LoginUser)
 	router.GET("/feed/", handlers.Feed)
 
+	// extra apis - I
+	router.GET("/comment/list/", handlers.ListComment)
+
 	// jwt middleware
 	router.Use(middleware.JWTAuthMiddleware())
 
@@ -27,7 +30,6 @@ func initRouter(engine *gin.Engine) {
 	router.POST("/favorite/action/", handlers.ActionFavorite)
 	router.GET("/favorite/list/", handlers.ListFavorite)
 	router.POST("/comment/action/", handlers.ActionComment)
-	router.GET("/comment/list/", handlers.ListComment)
 
 	// extra apis - II
 	router.POST("/relation/action/", handlers.ActionRelation)

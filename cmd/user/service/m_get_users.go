@@ -19,23 +19,31 @@ func NewMGetUsersService(ctx context.Context) *MGetUsersService {
 }
 
 // MGetUsers batch get users
-func (s *MGetUsersService) MGetUsers(req *user.UsersMGetRequest) ([]*user.User, error) {
+func (s *MGetUsersService) MGetUsers(req *user.UsersMGetRequest) (map[int64]*user.User, error) {
 	users, err := db.MGetUsers(s.ctx, req.UserIdList)
 	if err != nil {
 		return nil, err
 	}
-	if len(users) == 0 || len(users) != len(req.UserIdList) {
+	if len(users) == 0 {
 		return nil, erren.UserNotExistErr
 	}
 
-	userList := make([]*user.User, len(users))
-	for i, dbUser := range users {
-		// TODO move to rpc.ISFollow
-		isFollow, err := db.QueryIsFollow(s.ctx, req.UserId, int64(dbUser.ID))
-		if err != nil {
-			return nil, err
+	userMap := make(map[int64]*user.User, len(users))
+	for _, dbUser := range users {
+		// TODO move to rpc.IsFollow
+		//isFollow, err := db.QueryIsFollow(s.ctx, req.UserId, int64(dbUser.ID))
+		//if err != nil {
+		//	return nil, err
+		//}
+		id := int64(dbUser.ID)
+		userMap[id] = &user.User{
+			Id:   id,
+			Name: dbUser.Username,
+			// TODO
+			//FollowCount:   dbUser.FollowCount,
+			//FollowerCount: dbUser.FollowerCount,
+			IsFollow: false,
 		}
-		userList[i] = &user.User{Id: int64(dbUser.ID), Name: dbUser.Username, FollowCount: dbUser.FollowCount, FollowerCount: dbUser.FollowerCount, IsFollow: isFollow}
 	}
-	return userList, nil
+	return userMap, nil
 }

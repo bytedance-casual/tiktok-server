@@ -14,6 +14,7 @@ type Client interface {
 	ActionPublish(ctx context.Context, req *publish.PublishActionRequest, callOptions ...callopt.Option) (r *publish.PublishActionResponse, err error)
 	ListPublish(ctx context.Context, req *publish.PublishListRequest, callOptions ...callopt.Option) (r *publish.PublishListResponse, err error)
 	VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest, callOptions ...callopt.Option) (r *publish.PublishVideoActionResponse, err error)
+	MGetVideos(ctx context.Context, req *publish.VideosMGetRequest, callOptions ...callopt.Option) (r *publish.VideosMGetResponse, err error)
 }
 
 // NewClient creates a client for the service defined in IDL.
@@ -58,4 +59,9 @@ func (p *kPublishServiceClient) ListPublish(ctx context.Context, req *publish.Pu
 func (p *kPublishServiceClient) VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest, callOptions ...callopt.Option) (r *publish.PublishVideoActionResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.VideoActionPublish(ctx, req)
+}
+
+func (p *kPublishServiceClient) MGetVideos(ctx context.Context, req *publish.VideosMGetRequest, callOptions ...callopt.Option) (r *publish.VideosMGetResponse, err error) {
+	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
+	return p.kClient.MGetVideos(ctx, req)
 }

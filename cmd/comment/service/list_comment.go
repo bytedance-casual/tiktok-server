@@ -39,11 +39,11 @@ func (s *QueryCommentService) QueryComment(req *comment.CommentListRequest, user
 		return nil, err
 	}
 
-	users := resp.Users
+	userMap := resp.Users
 	for i, comm := range comments {
 		commentList = append(commentList, &comment.Comment{
 			Id:         int64(comm.ID),
-			User:       users[i],
+			User:       userMap[userIdList[i]],
 			Content:    comm.Content.Content,
 			CreateDate: comm.CreatedAt.Format("2006-01-02 15:04:05"),
 		})

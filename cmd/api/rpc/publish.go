@@ -70,3 +70,14 @@ func VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequ
 	}
 	return resp, nil
 }
+
+func MGetVideos(ctx context.Context, req *publish.VideosMGetRequest) (*publish.VideosMGetResponse, error) {
+	resp, err := publishClient.MGetVideos(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}

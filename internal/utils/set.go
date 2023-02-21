@@ -7,11 +7,11 @@ import (
 type void struct{} //空结构不占用任何内存
 
 // Set 基于sync.Map实现的Set
-type Set[T string] struct {
+type Set[T string | int64] struct {
 	members *sync.Map
 }
 
-func NewSet[T string]() *Set[T] {
+func NewSet[T string | int64]() *Set[T] {
 	return &Set[T]{
 		members: new(sync.Map),
 	}

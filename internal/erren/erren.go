@@ -24,7 +24,7 @@ import (
 // example: if _,ok := erren.ErrorMap[10001]; ok{}
 // 返回ok=true，10001在错误代码组，false则不在
 
-var ErrorMap = map[int32]struct{}{10001: {}, 10002: {}, 10003: {}, 10004: {}, 10005: {}, 10006: {}}
+var ErrorMap = map[int32]struct{}{10001: {}, 10002: {}, 10003: {}, 10004: {}, 10005: {}, 10006: {}, 10007: {}}
 
 // 新增错误后也需要添加到ErrorMap
 const (
@@ -35,6 +35,7 @@ const (
 	UserAlreadyExistErrCode    = 10004
 	UserNotExistErrCode        = 10005
 	TypeNotSupportErrCode      = 10006
+	VideoNotFoundErrCode       = 10007
 )
 
 type ErrEn struct {
@@ -74,6 +75,7 @@ var (
 	UserAlreadyExistErr    = NewErrNo(UserAlreadyExistErrCode, "User Already Exist")
 	UserNotExistErr        = NewErrNo(UserNotExistErrCode, "User Not Exist")
 	TypeNotSupportErr      = NewErrNo(TypeNotSupportErrCode, "Type Not Support")
+	VideoNotFoundErr       = NewErrNo(VideoNotFoundErrCode, "Video Not Found")
 )
 
 // ConvertErr convert error to ErrEn

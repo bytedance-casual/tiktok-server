@@ -26,6 +26,16 @@ struct CommentListResponse {
     3:required list<Comment> comment_list // 评论列表
 }
 
+struct MCountVideoCommentRequest {
+    1:required list<i64> video_id_list
+}
+
+struct MCountVideoCommentResponse {
+    1:required i32 status_code
+    2:optional string status_msg
+    3:required list<i64> count_list
+}
+
 struct Comment {
     1:required i64 id             // 视频评论id
     2:required user.User user          // 评论用户信息
@@ -38,4 +48,7 @@ service CommentService {
     CommentActionResponse ActionComment(1:required CommentActionRequest req)
     // 视频评论列表
     CommentListResponse ListComment(1:required CommentListRequest req)
+    // protect
+    // 批量查询评论数
+    MCountVideoCommentResponse MCountVideoComment(1:required MCountVideoCommentRequest req)
 }

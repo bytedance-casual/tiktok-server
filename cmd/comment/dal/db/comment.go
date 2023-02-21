@@ -49,3 +49,13 @@ func QueryComment(videoId int64, ctx context.Context) ([]*Comment, error) {
 	}
 	return resp, nil
 }
+
+func MCountComment(videoIdList []int64, ctx context.Context) ([]int64, error) {
+	countList := make([]int64, len(videoIdList))
+	for i, videoId := range videoIdList {
+		if err := DB.WithContext(ctx).Model(&Comment{}).Where("video_id = ?", videoId).Count(&countList[i]).Error; err != nil {
+			return nil, err
+		}
+	}
+	return countList, nil
+}

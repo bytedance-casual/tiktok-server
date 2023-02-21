@@ -9,12 +9,10 @@ import (
 
 type Video struct {
 	gorm.Model
-	AuthorId      int64
-	PlayUrl       string
-	CoverUrl      string
-	FavoriteCount int64
-	CommentCount  int64
-	Title         string
+	AuthorId int64
+	PlayUrl  string
+	CoverUrl string
+	Title    string
 }
 
 func (table *Video) TableName() string {

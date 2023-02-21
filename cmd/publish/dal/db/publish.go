@@ -33,6 +33,14 @@ func QueryVideo(userId int64, ctx context.Context) ([]*Video, error) {
 	return resp, nil
 }
 
+func MGetVideos(videoIdList []int64, ctx context.Context) ([]*Video, error) {
+	resp := make([]*Video, 0)
+	if err := DB.WithContext(ctx).Where("id in ?", videoIdList).Find(&resp).Error; err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 // UpdateVideoFavorite update video favorite number by (increase ? +1 : -1)
 func UpdateVideoFavorite(videoId int64, increase bool, ctx context.Context) error {
 	opt := utils.Ternary(increase, "favorite_count + ?", "favorite_count - ?")

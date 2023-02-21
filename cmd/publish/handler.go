@@ -68,6 +68,7 @@ func (s *PublishServiceImpl) ListPublish(ctx context.Context, req *publish.Publi
 	return resp, nil
 }
 
+// VideoActionPublish implements the PublishServiceImpl interface.
 func (s *PublishServiceImpl) VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest) (resp *publish.PublishVideoActionResponse, err error) {
 	// TODO: Your code here...
 	resp = nil
@@ -93,5 +94,26 @@ func (s *PublishServiceImpl) VideoActionPublish(ctx context.Context, req *publis
 	}
 
 	resp = &publish.PublishVideoActionResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg}
+	return resp, nil
+}
+
+// MGetVideos implements the PublishServiceImpl interface.
+func (s *PublishServiceImpl) MGetVideos(ctx context.Context, req *publish.VideosMGetRequest) (resp *publish.VideosMGetResponse, err error) {
+	// TODO: Your code here...
+	resp = nil
+
+	if req.UserId <= 0 || len(req.VideoIdList) == 0 {
+		resp = &publish.VideosMGetResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, err
+	}
+
+	videos, err := service.NewMGetVideosService(ctx).MGetVideos(req)
+	if err != nil {
+		errStr := err.Error()
+		resp = &publish.VideosMGetResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
+		return resp, err
+	}
+
+	resp = &publish.VideosMGetResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, Videos: videos}
 	return resp, nil
 }

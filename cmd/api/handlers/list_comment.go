@@ -20,7 +20,7 @@ func ListComment(c *gin.Context) {
 		return
 	}
 
-	if request.VideoId <= 0 || len(request.Token) == 0 {
+	if request.VideoId <= 0 {
 		BadResponse(c, erren.ParamErr)
 		return
 	}

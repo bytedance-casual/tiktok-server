@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"tiktok-server/cmd/publish/dal/db"
+	"tiktok-server/cmd/publish/rpc"
+	"tiktok-server/kitex_gen/favorite"
 	"tiktok-server/kitex_gen/feed"
 	"tiktok-server/kitex_gen/publish"
 	"tiktok-server/kitex_gen/user"
@@ -24,18 +26,26 @@ func (s *QueryVideoService) QueryVideo(req *publish.PublishListRequest, user *us
 		return nil, err
 	}
 
+	videoIdList := make([]int64, len(videos))
+	for i, video := range videos {
+		videoIdList[i] = int64(video.ID)
+	}
+
+	resp, err := rpc.MCountFavorite(s.ctx, &favorite.MCountVideoFavoriteRequest{VideoIdList: videoIdList})
+	if err != nil {
+		return nil, err
+	}
+
+	countList := resp.CountList
 	pVideos := make([]*feed.Video, len(videos))
 	for i, video := range videos {
 		pVideos[i] = &feed.Video{
-			Id:            int64(video.ID),
+			Id:            videoIdList[i],
 			Author:        user,
 			PlayUrl:       video.PlayUrl,
 			CoverUrl:      video.CoverUrl,
-			FavoriteCount: video.FavoriteCount,
-			CommentCount:  video.CommentCount,
-			// TODO /favorite/list/
-			IsFavorite: false,
-			Title:      video.Title,
+			FavoriteCount: countList[i],
+			Title:         video.Title,
 		}
 	}
 	return pVideos, nil

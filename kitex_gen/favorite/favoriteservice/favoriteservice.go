@@ -21,6 +21,8 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	methods := map[string]kitex.MethodInfo{
 		"ActionFavorite": kitex.NewMethodInfo(actionFavoriteHandler, newFavoriteServiceActionFavoriteArgs, newFavoriteServiceActionFavoriteResult, false),
 		"ListFavorite":   kitex.NewMethodInfo(listFavoriteHandler, newFavoriteServiceListFavoriteArgs, newFavoriteServiceListFavoriteResult, false),
+		"MCheckFavorite": kitex.NewMethodInfo(mCheckFavoriteHandler, newFavoriteServiceMCheckFavoriteArgs, newFavoriteServiceMCheckFavoriteResult, false),
+		"MCountFavorite": kitex.NewMethodInfo(mCountFavoriteHandler, newFavoriteServiceMCountFavoriteArgs, newFavoriteServiceMCountFavoriteResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "favorite",
@@ -72,6 +74,42 @@ func newFavoriteServiceListFavoriteResult() interface{} {
 	return favorite.NewFavoriteServiceListFavoriteResult()
 }
 
+func mCheckFavoriteHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*favorite.FavoriteServiceMCheckFavoriteArgs)
+	realResult := result.(*favorite.FavoriteServiceMCheckFavoriteResult)
+	success, err := handler.(favorite.FavoriteService).MCheckFavorite(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newFavoriteServiceMCheckFavoriteArgs() interface{} {
+	return favorite.NewFavoriteServiceMCheckFavoriteArgs()
+}
+
+func newFavoriteServiceMCheckFavoriteResult() interface{} {
+	return favorite.NewFavoriteServiceMCheckFavoriteResult()
+}
+
+func mCountFavoriteHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*favorite.FavoriteServiceMCountFavoriteArgs)
+	realResult := result.(*favorite.FavoriteServiceMCountFavoriteResult)
+	success, err := handler.(favorite.FavoriteService).MCountFavorite(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newFavoriteServiceMCountFavoriteArgs() interface{} {
+	return favorite.NewFavoriteServiceMCountFavoriteArgs()
+}
+
+func newFavoriteServiceMCountFavoriteResult() interface{} {
+	return favorite.NewFavoriteServiceMCountFavoriteResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -97,6 +135,26 @@ func (p *kClient) ListFavorite(ctx context.Context, req *favorite.FavoriteListRe
 	_args.Req = req
 	var _result favorite.FavoriteServiceListFavoriteResult
 	if err = p.c.Call(ctx, "ListFavorite", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MCheckFavorite(ctx context.Context, req *favorite.MCheckFavoriteRequest) (r *favorite.MCheckFavoriteResponse, err error) {
+	var _args favorite.FavoriteServiceMCheckFavoriteArgs
+	_args.Req = req
+	var _result favorite.FavoriteServiceMCheckFavoriteResult
+	if err = p.c.Call(ctx, "MCheckFavorite", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MCountFavorite(ctx context.Context, req *favorite.MCountVideoFavoriteRequest) (r *favorite.MCountVideoFavoriteResponse, err error) {
+	var _args favorite.FavoriteServiceMCountFavoriteArgs
+	_args.Req = req
+	var _result favorite.FavoriteServiceMCountFavoriteResult
+	if err = p.c.Call(ctx, "MCountFavorite", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

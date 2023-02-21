@@ -22,6 +22,7 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"ActionPublish":      kitex.NewMethodInfo(actionPublishHandler, newPublishServiceActionPublishArgs, newPublishServiceActionPublishResult, false),
 		"ListPublish":        kitex.NewMethodInfo(listPublishHandler, newPublishServiceListPublishArgs, newPublishServiceListPublishResult, false),
 		"VideoActionPublish": kitex.NewMethodInfo(videoActionPublishHandler, newPublishServiceVideoActionPublishArgs, newPublishServiceVideoActionPublishResult, false),
+		"MGetVideos":         kitex.NewMethodInfo(mGetVideosHandler, newPublishServiceMGetVideosArgs, newPublishServiceMGetVideosResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "publish",
@@ -91,6 +92,24 @@ func newPublishServiceVideoActionPublishResult() interface{} {
 	return publish.NewPublishServiceVideoActionPublishResult()
 }
 
+func mGetVideosHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*publish.PublishServiceMGetVideosArgs)
+	realResult := result.(*publish.PublishServiceMGetVideosResult)
+	success, err := handler.(publish.PublishService).MGetVideos(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newPublishServiceMGetVideosArgs() interface{} {
+	return publish.NewPublishServiceMGetVideosArgs()
+}
+
+func newPublishServiceMGetVideosResult() interface{} {
+	return publish.NewPublishServiceMGetVideosResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -126,6 +145,16 @@ func (p *kClient) VideoActionPublish(ctx context.Context, req *publish.PublishVi
 	_args.Req = req
 	var _result publish.PublishServiceVideoActionPublishResult
 	if err = p.c.Call(ctx, "VideoActionPublish", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MGetVideos(ctx context.Context, req *publish.VideosMGetRequest) (r *publish.VideosMGetResponse, err error) {
+	var _args publish.PublishServiceMGetVideosArgs
+	_args.Req = req
+	var _result publish.PublishServiceMGetVideosResult
+	if err = p.c.Call(ctx, "MGetVideos", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
