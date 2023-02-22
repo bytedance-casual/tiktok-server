@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"strconv"
 	"tiktok-server/cmd/relation/service"
 	"tiktok-server/internal/erren"
+	"tiktok-server/internal/middleware"
 	"tiktok-server/kitex_gen/relation"
 )
 
@@ -72,6 +74,18 @@ func (s *RelationServiceImpl) ListFollowerRelation(ctx context.Context, req *rel
 
 // ListFriendRelation implements the RelationServiceImpl interface.
 func (s *RelationServiceImpl) ListFriendRelation(ctx context.Context, req *relation.RelationFriendListRequest) (resp *relation.RelationFriendListResponse, err error) {
-	// TODO: Your code here...
-	return
+	if req.UserId <= 0 || len(req.Token) == 0 {
+		resp = &relation.RelationFriendListResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, nil
+	}
+	claims, err := middleware.ParseToken(req.Token)
+	friends, err := service.NewFriendListService(ctx).ListFriend(strconv.FormatInt(claims.ID, 10))
+	if err != nil {
+		errStr := err.Error()
+		resp = &relation.RelationFriendListResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
+		return resp, nil
+	}
+	resp = &relation.RelationFriendListResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, UserList: friends}
+	return resp, nil
+
 }
