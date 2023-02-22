@@ -70,3 +70,24 @@ func (s *MessageServiceImpl) ActionMessage(ctx context.Context, req *message.Mes
 	resp = &message.MessageActionResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg}
 	return resp, nil
 }
+
+// MGetLatestMessage implements the MessageServiceImpl interface.
+func (s *MessageServiceImpl) MGetLatestMessage(ctx context.Context, req *message.MGetLatestMessageRequest) (resp *message.MGetLatestMessageResponse, err error) {
+	// TODO: Your code here...
+	resp = nil
+
+	if req.UserId == 0 || len(req.FriendIdList) == 0 {
+		resp = &message.MGetLatestMessageResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, nil
+	}
+
+	typeList, contentList, err := service.NewMGetLatestMessageService(ctx).MGetLatestMessage(req)
+	if err != nil {
+		errStr := err.Error()
+		resp = &message.MGetLatestMessageResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
+		return resp, err
+	}
+
+	resp = &message.MGetLatestMessageResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, TypeList: typeList, ContentList: contentList}
+	return resp, nil
+}

@@ -59,3 +59,14 @@ func ActionMessage(ctx context.Context, req *message.MessageActionRequest) (*mes
 	}
 	return resp, nil
 }
+
+func MGetLatestMessage(ctx context.Context, req *message.MGetLatestMessageRequest) (*message.MGetLatestMessageResponse, error) {
+	resp, err := messageClient.MGetLatestMessage(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
+		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
+	}
+	return resp, nil
+}

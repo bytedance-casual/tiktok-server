@@ -8,8 +8,9 @@ import (
 )
 
 type MessageChatRequest struct {
-	Token    string `form:"token"`
-	ToUserId int64  `form:"to_user_id"`
+	Token      string `form:"token"`
+	ToUserId   int64  `form:"to_user_id"`
+	PreMsgTime int64  `form:"pre_msg_time"`
 }
 
 // ChatMessage 当前登录用户和其他指定用户的聊天消息记录
@@ -26,8 +27,9 @@ func ChatMessage(c *gin.Context) {
 	}
 
 	resp, err := rpc.ChatMessage(c.Request.Context(), &message.MessageChatRequest{
-		Token:    request.Token,
-		ToUserId: request.ToUserId,
+		Token:      request.Token,
+		ToUserId:   request.ToUserId,
+		PreMsgTime: request.PreMsgTime,
 	})
 	if err != nil {
 		BadResponse(c, erren.ConvertErr(err))
