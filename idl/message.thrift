@@ -1,8 +1,9 @@
 namespace go message
 
 struct MessageChatRequest {
-    1:required string token   // 用户鉴权token
-    2:required i64 to_user_id // 对方用户id
+    1:required string token     // 用户鉴权token
+    2:required i64 to_user_id   // 对方用户id
+    3:required i64 pre_msg_time // 上次最新消息的时间
 }
 
 struct MessageChatResponse {
@@ -23,6 +24,18 @@ struct MessageActionResponse {
     2:optional string status_msg          // 返回状态描述
 }
 
+struct MGetLatestMessageRequest {
+    1:required i64 user_id
+    2:required list<i64> friend_id_list
+}
+
+struct MGetLatestMessageResponse {
+    1:required i32 status_code
+    2:optional string status_msg
+    3:required list<bool> type_list // true-发送, false-接收
+    4:required list<string> content_list
+}
+
 struct Message {
     1:required i64 id             // 消息id
     2:required i64 to_user_id     // 该消息接收者的id
@@ -36,4 +49,7 @@ service MessageService {
     MessageChatResponse ChatMessage(1:required MessageChatRequest req)
     // 消息操作
     MessageActionResponse ActionMessage(1:required MessageActionRequest req)
+    // protect
+    // 批获取最新消息
+    MGetLatestMessageResponse MGetLatestMessage(1:required MGetLatestMessageRequest req)
 }

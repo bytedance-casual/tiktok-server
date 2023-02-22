@@ -23,6 +23,8 @@ func NewServiceInfo() *kitex.ServiceInfo {
 		"ListFollowRelation":   kitex.NewMethodInfo(listFollowRelationHandler, newRelationServiceListFollowRelationArgs, newRelationServiceListFollowRelationResult, false),
 		"ListFollowerRelation": kitex.NewMethodInfo(listFollowerRelationHandler, newRelationServiceListFollowerRelationArgs, newRelationServiceListFollowerRelationResult, false),
 		"ListFriendRelation":   kitex.NewMethodInfo(listFriendRelationHandler, newRelationServiceListFriendRelationArgs, newRelationServiceListFriendRelationResult, false),
+		"MCheckFollowRelation": kitex.NewMethodInfo(mCheckFollowRelationHandler, newRelationServiceMCheckFollowRelationArgs, newRelationServiceMCheckFollowRelationResult, false),
+		"MCountRelation":       kitex.NewMethodInfo(mCountRelationHandler, newRelationServiceMCountRelationArgs, newRelationServiceMCountRelationResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "relation",
@@ -110,6 +112,42 @@ func newRelationServiceListFriendRelationResult() interface{} {
 	return relation.NewRelationServiceListFriendRelationResult()
 }
 
+func mCheckFollowRelationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*relation.RelationServiceMCheckFollowRelationArgs)
+	realResult := result.(*relation.RelationServiceMCheckFollowRelationResult)
+	success, err := handler.(relation.RelationService).MCheckFollowRelation(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newRelationServiceMCheckFollowRelationArgs() interface{} {
+	return relation.NewRelationServiceMCheckFollowRelationArgs()
+}
+
+func newRelationServiceMCheckFollowRelationResult() interface{} {
+	return relation.NewRelationServiceMCheckFollowRelationResult()
+}
+
+func mCountRelationHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*relation.RelationServiceMCountRelationArgs)
+	realResult := result.(*relation.RelationServiceMCountRelationResult)
+	success, err := handler.(relation.RelationService).MCountRelation(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newRelationServiceMCountRelationArgs() interface{} {
+	return relation.NewRelationServiceMCountRelationArgs()
+}
+
+func newRelationServiceMCountRelationResult() interface{} {
+	return relation.NewRelationServiceMCountRelationResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -155,6 +193,26 @@ func (p *kClient) ListFriendRelation(ctx context.Context, req *relation.Relation
 	_args.Req = req
 	var _result relation.RelationServiceListFriendRelationResult
 	if err = p.c.Call(ctx, "ListFriendRelation", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MCheckFollowRelation(ctx context.Context, req *relation.MCheckFollowRelationRequest) (r *relation.MCheckFollowRelationResponse, err error) {
+	var _args relation.RelationServiceMCheckFollowRelationArgs
+	_args.Req = req
+	var _result relation.RelationServiceMCheckFollowRelationResult
+	if err = p.c.Call(ctx, "MCheckFollowRelation", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MCountRelation(ctx context.Context, req *relation.MCountRelationRequest) (r *relation.MCountRelationResponse, err error) {
+	var _args relation.RelationServiceMCountRelationArgs
+	_args.Req = req
+	var _result relation.RelationServiceMCountRelationResult
+	if err = p.c.Call(ctx, "MCountRelation", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil

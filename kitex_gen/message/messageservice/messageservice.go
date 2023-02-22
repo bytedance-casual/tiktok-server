@@ -19,8 +19,9 @@ func NewServiceInfo() *kitex.ServiceInfo {
 	serviceName := "MessageService"
 	handlerType := (*message.MessageService)(nil)
 	methods := map[string]kitex.MethodInfo{
-		"ChatMessage":   kitex.NewMethodInfo(chatMessageHandler, newMessageServiceChatMessageArgs, newMessageServiceChatMessageResult, false),
-		"ActionMessage": kitex.NewMethodInfo(actionMessageHandler, newMessageServiceActionMessageArgs, newMessageServiceActionMessageResult, false),
+		"ChatMessage":       kitex.NewMethodInfo(chatMessageHandler, newMessageServiceChatMessageArgs, newMessageServiceChatMessageResult, false),
+		"ActionMessage":     kitex.NewMethodInfo(actionMessageHandler, newMessageServiceActionMessageArgs, newMessageServiceActionMessageResult, false),
+		"MGetLatestMessage": kitex.NewMethodInfo(mGetLatestMessageHandler, newMessageServiceMGetLatestMessageArgs, newMessageServiceMGetLatestMessageResult, false),
 	}
 	extra := map[string]interface{}{
 		"PackageName": "message",
@@ -72,6 +73,24 @@ func newMessageServiceActionMessageResult() interface{} {
 	return message.NewMessageServiceActionMessageResult()
 }
 
+func mGetLatestMessageHandler(ctx context.Context, handler interface{}, arg, result interface{}) error {
+	realArg := arg.(*message.MessageServiceMGetLatestMessageArgs)
+	realResult := result.(*message.MessageServiceMGetLatestMessageResult)
+	success, err := handler.(message.MessageService).MGetLatestMessage(ctx, realArg.Req)
+	if err != nil {
+		return err
+	}
+	realResult.Success = success
+	return nil
+}
+func newMessageServiceMGetLatestMessageArgs() interface{} {
+	return message.NewMessageServiceMGetLatestMessageArgs()
+}
+
+func newMessageServiceMGetLatestMessageResult() interface{} {
+	return message.NewMessageServiceMGetLatestMessageResult()
+}
+
 type kClient struct {
 	c client.Client
 }
@@ -97,6 +116,16 @@ func (p *kClient) ActionMessage(ctx context.Context, req *message.MessageActionR
 	_args.Req = req
 	var _result message.MessageServiceActionMessageResult
 	if err = p.c.Call(ctx, "ActionMessage", &_args, &_result); err != nil {
+		return
+	}
+	return _result.GetSuccess(), nil
+}
+
+func (p *kClient) MGetLatestMessage(ctx context.Context, req *message.MGetLatestMessageRequest) (r *message.MGetLatestMessageResponse, err error) {
+	var _args message.MessageServiceMGetLatestMessageArgs
+	_args.Req = req
+	var _result message.MessageServiceMGetLatestMessageResult
+	if err = p.c.Call(ctx, "MGetLatestMessage", &_args, &_result); err != nil {
 		return
 	}
 	return _result.GetSuccess(), nil
