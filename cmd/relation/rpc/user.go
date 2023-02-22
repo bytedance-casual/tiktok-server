@@ -9,20 +9,20 @@ import (
 	"tiktok-server/internal/conf"
 	"tiktok-server/internal/erren"
 	"tiktok-server/internal/middleware"
-	"tiktok-server/kitex_gen/relation"
-	"tiktok-server/kitex_gen/relation/relationservice"
+	"tiktok-server/kitex_gen/user"
+	"tiktok-server/kitex_gen/user/userservice"
 	"time"
 )
 
-var relationClient relationservice.Client
+var userClient userservice.Client
 
-func initRelationRPC() {
+func initUserRPC() {
 	r, err := etcd.NewEtcdResolver([]string{conf.EtcdAddress})
 	if err != nil {
 		panic(err)
 	}
-	c, err := relationservice.NewClient(
-		conf.RelationServiceName,
+	c, err := userservice.NewClient(
+		conf.UserServiceName,
 		client.WithMiddleware(middleware.CommonMiddleware),
 		client.WithInstanceMW(middleware.ClientMiddleware),
 		client.WithMuxConnection(1),                       // mux
@@ -35,11 +35,11 @@ func initRelationRPC() {
 	if err != nil {
 		panic(err)
 	}
-	relationClient = c
+	userClient = c
 }
 
-func ActionRelation(ctx context.Context, req *relation.RelationActionRequest) (*relation.RelationActionResponse, error) {
-	resp, err := relationClient.ActionRelation(ctx, req)
+func User(ctx context.Context, req *user.UserRequest) (*user.UserResponse, error) {
+	resp, err := userClient.User(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -49,8 +49,8 @@ func ActionRelation(ctx context.Context, req *relation.RelationActionRequest) (*
 	return resp, nil
 }
 
-func ListFollowRelation(ctx context.Context, req *relation.RelationFollowListRequest) (*relation.RelationFollowListResponse, error) {
-	resp, err := relationClient.ListFollowRelation(ctx, req)
+func RegisterUser(ctx context.Context, req *user.UserRegisterRequest) (*user.UserRegisterResponse, error) {
+	resp, err := userClient.RegisterUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -60,8 +60,8 @@ func ListFollowRelation(ctx context.Context, req *relation.RelationFollowListReq
 	return resp, nil
 }
 
-func ListFollowerRelation(ctx context.Context, req *relation.RelationFollowerListRequest) (*relation.RelationFollowerListResponse, error) {
-	resp, err := relationClient.ListFollowerRelation(ctx, req)
+func LoginUser(ctx context.Context, req *user.UserLoginRequest) (*user.UserLoginResponse, error) {
+	resp, err := userClient.LoginUser(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -71,8 +71,8 @@ func ListFollowerRelation(ctx context.Context, req *relation.RelationFollowerLis
 	return resp, nil
 }
 
-func ListFriendRelation(ctx context.Context, req *relation.RelationFriendListRequest) (*relation.RelationFriendListResponse, error) {
-	resp, err := relationClient.ListFriendRelation(ctx, req)
+func MGetUsers(ctx context.Context, req *user.UsersMGetRequest) (*user.UsersMGetResponse, error) {
+	resp, err := userClient.MGetUsers(ctx, req)
 	if err != nil {
 		return nil, err
 	}
@@ -82,24 +82,14 @@ func ListFriendRelation(ctx context.Context, req *relation.RelationFriendListReq
 	return resp, nil
 }
 
-func MCheckFollowRelation(ctx context.Context, req *relation.MCheckFollowRelationRequest) (*relation.MCheckFollowRelationResponse, error) {
-	resp, err := relationClient.MCheckFollowRelation(ctx, req)
+func GetUserFromToken(ctx context.Context, token string) (*user.User, error) {
+	claims, err := middleware.ParseToken(token)
 	if err != nil {
 		return nil, err
 	}
-	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
-		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
-	}
-	return resp, nil
-}
-
-func MCountRelation(ctx context.Context, req *relation.MCountRelationRequest) (*relation.MCountRelationResponse, error) {
-	resp, err := relationClient.MCountRelation(ctx, req)
+	resp, err := User(ctx, &user.UserRequest{UserId: claims.ID, Token: token})
 	if err != nil {
 		return nil, err
 	}
-	if _, ok := erren.ErrorMap[resp.StatusCode]; ok {
-		return nil, erren.NewErrNo(resp.StatusCode, *resp.StatusMsg)
-	}
-	return resp, nil
+	return resp.User, nil
 }

@@ -24,6 +24,9 @@ func (s *ActionRelationService) Follow(req *relation.RelationActionRequest) (err
 	}
 	actor := strconv.FormatInt(claims.ID, 10)
 	toUser := strconv.FormatInt(req.ToUserId, 10)
+	if actor == toUser {
+		return errors.New("你不能关注自己")
+	}
 
 	follow, err := db.QueryHasFollow(s.ctx, actor, toUser)
 	if err != nil {

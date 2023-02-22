@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"tiktok-server/cmd/relation/dal/db"
+	"tiktok-server/cmd/relation/rpc"
 	"tiktok-server/internal/middleware"
 	"tiktok-server/kitex_gen/relation"
 	"tiktok-server/kitex_gen/user"
@@ -18,30 +19,32 @@ func NewFollowListService(ctx context.Context) *FollowListService {
 	}
 }
 
-// 查询关注列表
+// GetFollowList 查询关注列表
 func (s *FollowListService) GetFollowList(req *relation.RelationFollowListRequest) ([]*user.User, error) {
 	claims, err := middleware.ParseToken(req.Token)
 	if err != nil {
 		return nil, err
 	}
-
-	users, err := db.QueryFollowList(s.ctx, claims.ID)
-
+	userId := claims.ID
+	userIdList, err := db.QueryFollowList(s.ctx, userId)
 	if err != nil {
 		return nil, err
 	}
 
-	newusers := make([]*user.User, 0) //不同结构体，解耦，重新赋值返回
-
-	for k, v := range users {
-		newusers[k].Id = v.Id
-		newusers[k].Name = v.Name
-		newusers[k].FollowerCount = v.FollowerCount
-		newusers[k].FollowCount = v.FollowCount
-		newusers[k].IsFollow = v.IsFollow
+	var userMap map[int64]*user.User
+	if len(userIdList) != 0 {
+		resp, err := rpc.MGetUsers(s.ctx, &user.UsersMGetRequest{UserId: userId, UserIdList: userIdList})
+		if err != nil {
+			return nil, err
+		}
+		userMap = resp.Users
 	}
-	//users2 = append(users2, &user.User{Name: "1"})
-	//u := user.User{Id: int64(users[0].ID), FollowCount: users[0].FollowCount, FollowerCount: users[0].FollowerCount, IsFollow: isFollow, Name: users[0].Username}
-	//u := users[0]
-	return newusers, nil
+
+	i := 0
+	users := make([]*user.User, len(userMap))
+	for _, v := range userMap {
+		users[i] = v
+		i ++
+	}
+	return users, nil
 }

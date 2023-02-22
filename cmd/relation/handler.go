@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"strconv"
 	"tiktok-server/cmd/relation/service"
 	"tiktok-server/internal/erren"
 	"tiktok-server/internal/middleware"
@@ -79,7 +78,7 @@ func (s *RelationServiceImpl) ListFriendRelation(ctx context.Context, req *relat
 		return resp, nil
 	}
 	claims, err := middleware.ParseToken(req.Token)
-	friends, err := service.NewFriendListService(ctx).ListFriend(strconv.FormatInt(claims.ID, 10))
+	friends, err := service.NewFriendListService(ctx).ListFriend(claims.ID)
 	if err != nil {
 		errStr := err.Error()
 		resp = &relation.RelationFriendListResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
@@ -88,4 +87,46 @@ func (s *RelationServiceImpl) ListFriendRelation(ctx context.Context, req *relat
 	resp = &relation.RelationFriendListResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, UserList: friends}
 	return resp, nil
 
+}
+
+// MCheckFollowRelation implements the RelationServiceImpl interface.
+func (s *RelationServiceImpl) MCheckFollowRelation(ctx context.Context, req *relation.MCheckFollowRelationRequest) (resp *relation.MCheckFollowRelationResponse, err error) {
+	// TODO: Your code here...
+	resp = nil
+
+	if req.UserId <= 0 || len(req.UserIdList) == 0 {
+		resp = &relation.MCheckFollowRelationResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, nil
+	}
+
+	checkList, err := service.NewMCheckFollowRelationService(ctx).MCheckFollow(req)
+	if err != nil {
+		errStr := err.Error()
+		resp = &relation.MCheckFollowRelationResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
+		return resp, nil
+	}
+
+	resp = &relation.MCheckFollowRelationResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, CheckList: checkList}
+	return resp, nil
+}
+
+// MCountRelation implements the RelationServiceImpl interface.
+func (s *RelationServiceImpl) MCountRelation(ctx context.Context, req *relation.MCountRelationRequest) (resp *relation.MCountRelationResponse, err error) {
+	// TODO: Your code here...
+	resp = nil
+
+	if len(req.UserIdList) == 0 {
+		resp = &relation.MCountRelationResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
+		return resp, nil
+	}
+
+	followCountList, followerCountList, err := service.NewMCountRelationService(ctx).MCount(req)
+	if err != nil {
+		errStr := err.Error()
+		resp = &relation.MCountRelationResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
+		return resp, nil
+	}
+
+	resp = &relation.MCountRelationResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg, FollowCountList: followCountList, FollowerCountList: followerCountList}
+	return resp, nil
 }

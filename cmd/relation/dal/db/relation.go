@@ -4,28 +4,20 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"strconv"
+	"tiktok-server/internal/utils"
 )
 
-type FollowStatus bool
-
 const (
-	Normal   FollowStatus = true
-	Canceled FollowStatus = false
+	Normal   bool = true
+	Canceled bool = false
 )
 
 type Follow struct {
 	gorm.Model
-	UserId         string       `json:"user_id"`
-	FollowedUserId string       `json:"followed_user_id"`
-	IsFollow       FollowStatus `json:"is_follow"`
-}
-
-type UserInfoResp struct {
-	FollowCount   int64  `json:"follow_count"`                    // 关注总数
-	FollowerCount int64  `json:"follower_count"`                  // 粉丝总数
-	Id            int64  `json:"id"`                              // 用户id，和db.user不同
-	IsFollow      bool   `json:"is_follow"`                       // true-已关注，false-未关注
-	Name          string `json:"username" gorm:"column:username"` // 用户名称
+	UserId         string `json:"user_id"`
+	FollowedUserId string `json:"followed_user_id"`
+	IsFollow       bool   `json:"is_follow"`
 }
 
 func (f *Follow) TableName() string {
@@ -33,7 +25,7 @@ func (f *Follow) TableName() string {
 }
 
 func CreateFollow(ctx context.Context, actor string, toUser string) (err error) {
-	err = DB.WithContext(ctx).Create(Follow{
+	err = DB.WithContext(ctx).Create(&Follow{
 		UserId:         actor,
 		FollowedUserId: toUser,
 		IsFollow:       Normal,
@@ -50,45 +42,93 @@ func QueryHasFollow(ctx context.Context, actor string, toUser string) (f *Follow
 	err = DB.WithContext(ctx).Where(map[string]string{
 		"user_id":          actor,
 		"followed_user_id": toUser,
-	}).First(f).Error
+	}).First(&f).Error
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
 	return
 }
 
-// QueryFollowerList 查询粉丝列表 -连表查询 -返回粉丝信息
-func QueryFollowerList(ctx context.Context, userID int64) ([]*UserInfoResp, error) {
-	res := make([]*UserInfoResp, 0)
-	if userID == 0 {
-		return res, nil
+// QueryFollowerList 查询粉丝列表
+func QueryFollowerList(ctx context.Context, userId int64) ([]int64, error) {
+	followList := make([]*Follow, 0)
+	if userId == 0 {
+		return []int64{}, nil
 	}
 
-	if err := DB.WithContext(ctx).Table("users").Select("users.id, users.username, users.follow_count, users.follower_count, follows.is_follow").Joins("join follows on follows.user_id = users.id").Where("follows.followed_user_id = ? AND follows.is_follow = ?", userID, Normal).Find(&res).Error; err != nil {
+	if err := DB.WithContext(ctx).Where("followed_user_id = ? AND is_follow = ?", userId, Normal).Find(&followList).Error; err != nil {
 		return nil, err
 	}
-	/*
-		for k, _ := range res {
-			fmt.Printf("%#v", res[k])
-		}*/
-	return res, nil
+
+	resp := make([]int64, len(followList))
+	for i, follow := range followList {
+		atoi, err := strconv.Atoi(follow.UserId)
+		if err != nil {
+			return nil, err
+		}
+		resp[i] = int64(atoi)
+	}
+	return resp, nil
 }
 
-// QueryFollowList 查询关注列表--连表查询 -返回偶像信息
-func QueryFollowList(ctx context.Context, userID int64) ([]*UserInfoResp, error) {
-	res := make([]*UserInfoResp, 0)
-
-	if userID == 0 {
-		return res, nil
+// QueryFollowList 查询关注列表
+func QueryFollowList(ctx context.Context, userId int64) ([]int64, error) {
+	followList := make([]*Follow, 0)
+	if userId == 0 {
+		return []int64{}, nil
 	}
 
-	if err := DB.WithContext(ctx).Table("users").Select("users.id, users.username, users.follow_count, users.follower_count, follows.is_follow").Joins("join follows on follows.followed_user_id = users.id").Where("follows.user_id = ? AND follows.is_follow = ?", userID, Normal).Find(&res).Error; err != nil {
+	if err := DB.WithContext(ctx).Where("user_id = ? AND is_follow = ?", userId, Normal).Find(&followList).Error; err != nil {
 		return nil, err
 	}
-	/*
-		for k, _ := range res {
-			fmt.Printf("%#v", res[k])
+
+	resp := make([]int64, len(followList))
+	for i, follow := range followList {
+		temp, err := strconv.Atoi(follow.FollowedUserId)
+		if err != nil {
+			return nil, err
 		}
-	*/
-	return res, nil
+		resp[i] = int64(temp)
+	}
+	return resp, nil
+}
+
+func MCheckFollow(userId int64, userIdList []int64, ctx context.Context) ([]bool, error) {
+	followList := make([]*Follow, 0)
+	if err := DB.WithContext(ctx).Where("user_id = ? AND is_follow = ? AND followed_user_id IN ?", userId, Normal, userIdList).Find(&followList).Error; err != nil {
+		return nil, err
+	}
+
+	set := utils.NewSet[string]()
+	for _, follow := range followList {
+		set.Add(follow.FollowedUserId)
+	}
+
+	boolList := make([]bool, len(userIdList))
+	for i, id := range userIdList {
+		boolList[i] = set.Contains(strconv.FormatInt(id, 10))
+	}
+	return boolList, nil
+}
+
+// MCountFollow 统计用户关注数
+func MCountFollow(userIdList []int64, ctx context.Context) ([]int64, error) {
+	countList := make([]int64, len(userIdList))
+	for i, userId := range userIdList {
+		if err := DB.WithContext(ctx).Model(&Follow{}).Where("user_id = ? AND is_follow = ?", userId, Normal).Count(&countList[i]).Error; err != nil {
+			return nil, err
+		}
+	}
+	return countList, nil
+}
+
+// MCountFollower 统计用户粉丝数
+func MCountFollower(userIdList []int64, ctx context.Context) ([]int64, error) {
+	countList := make([]int64, len(userIdList))
+	for i, userId := range userIdList {
+		if err := DB.WithContext(ctx).Model(&Follow{}).Where("followed_user_id = ? AND is_follow = ?", userId, Normal).Count(&countList[i]).Error; err != nil {
+			return nil, err
+		}
+	}
+	return countList, nil
 }
