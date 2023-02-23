@@ -1,4 +1,23 @@
+<p align="center">
+  <img src="https://avatars.githubusercontent.com/u/122664360?s=200&v=4" width="200" height="200" alt="tiktok-server">
+</p>
+
+<div align="center">
+
 # Tiktok Document
+
+抖音项目服务器高性能分布式优化版实现
+
+</div>
+
+<p align="center">
+  <a href="https://github.com/bytedance-casual/tiktok-server/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/bytedance-casual/tiktok-server" alt="license">
+  </a>
+  <a href="https://github.com/bytedance-casual/tiktok-server/releases">
+    <img src="https://img.shields.io/github/v/release/bytedance-casual/tiktok-server?color=blueviolet&include_prereleases" alt="release">
+  </a>
+</p>
 
 ## 抖音项目服务端实现
 
