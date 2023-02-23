@@ -55,6 +55,7 @@ struct User {
 }
 
 service UserService {
+    // 查询用户信息
     UserResponse User(1:required UserRequest req)
     UserRegisterResponse RegisterUser(1:required UserRegisterRequest req)
     UserLoginResponse LoginUser(1:required UserLoginRequest req)

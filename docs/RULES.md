@@ -8,19 +8,6 @@
 
 本实现采用阿里云RDS云数据作为储存中心，其连接参数在 `configs/config.yml` 内
 
-## internal 结构
-
-- `bound`
-- `conf` 配置文件加载相关
-- `lock` 锁通用操作
-- `errren` 错误枚举
-- `middleware` 相关切面操作
-- `model` 模型结构体
-- `repo` 数据库通用操作
-- `sources` 数据源相关
-- `tracer` 链路追踪
-- `utils` 工具类
-
 ## 代码规范
 
 - 格式
