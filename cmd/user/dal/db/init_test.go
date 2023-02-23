@@ -10,6 +10,6 @@ import (
 func TestInit(t *testing.T) {
 	conf.Init()
 	Init()
-	fmt.Println(conf.Config)
+	fmt.Println(DB.Name())
 	assert.NotNil(t, DB)
 }
