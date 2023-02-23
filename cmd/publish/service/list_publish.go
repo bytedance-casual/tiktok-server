@@ -25,6 +25,9 @@ func (s *QueryVideoService) QueryVideo(req *publish.PublishListRequest, user *us
 	if err != nil {
 		return nil, err
 	}
+	if len(videos) == 0 {
+		return make([]*feed.Video, 0), nil
+	}
 
 	videoIdList := make([]int64, len(videos))
 	for i, video := range videos {

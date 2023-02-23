@@ -37,6 +37,9 @@ func ListFavorite(userId int64, ctx context.Context) ([]*feed.Video, error) {
 	if err := DB.WithContext(ctx).Where("user_id = ?", userId).Find(&resp).Error; err != nil {
 		return nil, err
 	}
+	if len(resp) == 0 {
+		return make([]*feed.Video, 0), nil
+	}
 
 	videoIdList := make([]int64, len(resp))
 	for i, like := range resp {

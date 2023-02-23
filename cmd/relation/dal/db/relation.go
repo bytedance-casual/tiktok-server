@@ -34,7 +34,7 @@ func CreateFollow(ctx context.Context, actor string, toUser string) (err error) 
 }
 
 func UpdateFollow(ctx context.Context, id uint, status bool) (err error) {
-	err = DB.WithContext(ctx).Where("id", id).Update("is_follow", status).Error
+	err = DB.WithContext(ctx).Model(&Follow{}).Where("id", id).Update("is_follow", status).Error
 	return
 }
 

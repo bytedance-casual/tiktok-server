@@ -68,35 +68,6 @@ func (s *PublishServiceImpl) ListPublish(ctx context.Context, req *publish.Publi
 	return resp, nil
 }
 
-// VideoActionPublish implements the PublishServiceImpl interface.
-func (s *PublishServiceImpl) VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest) (resp *publish.PublishVideoActionResponse, err error) {
-	// TODO: Your code here...
-	resp = nil
-
-	if req.VideoId <= 0 {
-		resp = &publish.PublishVideoActionResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
-		return resp, err
-	}
-
-	actionVideoService := service.NewActionVideoService(ctx)
-	if req.ActionType == 1 {
-		err = actionVideoService.UpdateFavorite(req)
-	} else if req.ActionType == 2 {
-		err = actionVideoService.UpdateComment(req)
-	} else {
-		err = erren.TypeNotSupportErr
-	}
-
-	if err != nil {
-		errStr := err.Error()
-		resp = &publish.PublishVideoActionResponse{StatusCode: erren.ServiceErr.ErrCode, StatusMsg: &errStr}
-		return resp, err
-	}
-
-	resp = &publish.PublishVideoActionResponse{StatusCode: erren.SuccessCode, StatusMsg: &erren.Success.ErrMsg}
-	return resp, nil
-}
-
 // MGetVideos implements the PublishServiceImpl interface.
 func (s *PublishServiceImpl) MGetVideos(ctx context.Context, req *publish.VideosMGetRequest) (resp *publish.VideosMGetResponse, err error) {
 	// TODO: Your code here...

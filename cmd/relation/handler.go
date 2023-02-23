@@ -17,7 +17,7 @@ func (s *RelationServiceImpl) ActionRelation(ctx context.Context, req *relation.
 		StatusCode: erren.SuccessCode,
 		StatusMsg:  nil,
 	}
-	if req.ToUserId <= 0 || len(req.Token) == 0 || (req.ActionType != 0 && req.ActionType != 1) {
+	if req.ToUserId <= 0 || len(req.Token) == 0 || (req.ActionType != 1 && req.ActionType != 2) {
 		resp = &relation.RelationActionResponse{StatusCode: erren.ParamErr.ErrCode, StatusMsg: &erren.ParamErr.ErrMsg}
 		return resp, nil
 	}

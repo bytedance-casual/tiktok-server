@@ -13,7 +13,6 @@ import (
 type Client interface {
 	ActionPublish(ctx context.Context, req *publish.PublishActionRequest, callOptions ...callopt.Option) (r *publish.PublishActionResponse, err error)
 	ListPublish(ctx context.Context, req *publish.PublishListRequest, callOptions ...callopt.Option) (r *publish.PublishListResponse, err error)
-	VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest, callOptions ...callopt.Option) (r *publish.PublishVideoActionResponse, err error)
 	MGetVideos(ctx context.Context, req *publish.VideosMGetRequest, callOptions ...callopt.Option) (r *publish.VideosMGetResponse, err error)
 }
 
@@ -54,11 +53,6 @@ func (p *kPublishServiceClient) ActionPublish(ctx context.Context, req *publish.
 func (p *kPublishServiceClient) ListPublish(ctx context.Context, req *publish.PublishListRequest, callOptions ...callopt.Option) (r *publish.PublishListResponse, err error) {
 	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
 	return p.kClient.ListPublish(ctx, req)
-}
-
-func (p *kPublishServiceClient) VideoActionPublish(ctx context.Context, req *publish.PublishVideoActionRequest, callOptions ...callopt.Option) (r *publish.PublishVideoActionResponse, err error) {
-	ctx = client.NewCtxWithCallOptions(ctx, callOptions)
-	return p.kClient.VideoActionPublish(ctx, req)
 }
 
 func (p *kPublishServiceClient) MGetVideos(ctx context.Context, req *publish.VideosMGetRequest, callOptions ...callopt.Option) (r *publish.VideosMGetResponse, err error) {
