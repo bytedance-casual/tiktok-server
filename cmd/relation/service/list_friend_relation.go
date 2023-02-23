@@ -40,6 +40,9 @@ func (s FriendListService) ListFriend(userId int64) ([]*relation.FriendUser, err
 		}
 	}
 
+	if len(friendIdList) == 0 {
+		return make([]*relation.FriendUser, 0), nil
+	}
 	resp1, err := rpc.MGetUsers(s.ctx, &user.UsersMGetRequest{UserId: userId, UserIdList: friendIdList})
 	if err != nil {
 		return nil, err
