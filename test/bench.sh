@@ -8,9 +8,9 @@ if [ $# -gt 1 ] || [ $1 == "help" ]; then
 fi
 
 if [ $1 == "all" ]; then
-  go test -bench=. -benchtime=10x -benchmem comment_test.go favorite_test.go feed_test.go message_test.go publish_test.go relation_test.go user_test.go main_test.go
+  go test -bench=. -benchtime=3x -benchmem comment_test.go favorite_test.go feed_test.go message_test.go publish_test.go relation_test.go user_test.go main_test.go
 else
-  go test -bench=. -benchtime=10x -benchmem $1_test.go main_test.go
+  go test -bench=. -benchtime=3x -benchmem $1_test.go main_test.go
 fi
 
 
