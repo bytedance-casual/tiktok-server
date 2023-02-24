@@ -9,6 +9,90 @@ import (
 )
 
 func TestActionRelation1(t *testing.T) {
+	doActionRelation1(t)
+}
+
+func TestActionRelation2(t *testing.T) {
+	doActionRelation2(t)
+}
+
+func TestListFollowRelation(t *testing.T) {
+	doListFollowRelation(t)
+}
+
+func TestListFollowerRelation(t *testing.T) {
+	doListFollowerRelation(t)
+}
+
+func TestListFriendRelation(t *testing.T) {
+	doListFriendRelation(t)
+}
+
+func TestMCheckFollowRelation(t *testing.T) {
+	doMCheckFollowRelation(t)
+}
+
+func TestMCountRelation(t *testing.T) {
+	doMCountRelation(t)
+}
+
+func BenchmarkActionRelation1(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doActionRelation1(b)
+		}
+	})
+}
+
+func BenchmarkActionRelation2(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doActionRelation2(b)
+		}
+	})
+}
+
+func BenchmarkListFollowRelation(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doListFollowRelation(b)
+		}
+	})
+}
+
+func BenchmarkListFollowerRelation(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doListFollowerRelation(b)
+		}
+	})
+}
+
+func BenchmarkListFriendRelation(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doListFriendRelation(b)
+		}
+	})
+}
+
+func BenchmarkMCheckFollowRelation(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doMCheckFollowRelation(b)
+		}
+	})
+}
+
+func BenchmarkMCountRelation(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doMCountRelation(b)
+		}
+	})
+}
+
+func doActionRelation1(t assert.TestingT) {
 	resp, err := rpc.ActionRelation(ctx, &relation.RelationActionRequest{
 		Token:      TOKEN,
 		ToUserId:   20,
@@ -18,7 +102,7 @@ func TestActionRelation1(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestActionRelation2(t *testing.T) {
+func doActionRelation2(t assert.TestingT) {
 	resp, err := rpc.ActionRelation(ctx, &relation.RelationActionRequest{
 		Token:      TOKEN,
 		ToUserId:   20,
@@ -28,7 +112,7 @@ func TestActionRelation2(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestListFollowRelation(t *testing.T) {
+func doListFollowRelation(t assert.TestingT) {
 	resp, err := rpc.ListFollowRelation(ctx, &relation.RelationFollowListRequest{
 		UserId: 2,
 		Token:  TOKEN,
@@ -37,7 +121,7 @@ func TestListFollowRelation(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestListFollowerRelation(t *testing.T) {
+func doListFollowerRelation(t assert.TestingT) {
 	resp, err := rpc.ListFollowerRelation(ctx, &relation.RelationFollowerListRequest{
 		UserId: 2,
 		Token:  TOKEN,
@@ -46,7 +130,7 @@ func TestListFollowerRelation(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestListFriendRelation(t *testing.T) {
+func doListFriendRelation(t assert.TestingT) {
 	resp, err := rpc.ListFriendRelation(ctx, &relation.RelationFriendListRequest{
 		UserId: 2,
 		Token:  TOKEN,
@@ -55,7 +139,7 @@ func TestListFriendRelation(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestMCheckFollowRelation(t *testing.T) {
+func doMCheckFollowRelation(t assert.TestingT) {
 	resp, err := rpc.MCheckFollowRelation(ctx, &relation.MCheckFollowRelationRequest{
 		UserId:     2,
 		UserIdList: []int64{3},
@@ -64,7 +148,7 @@ func TestMCheckFollowRelation(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestMCountRelation(t *testing.T) {
+func doMCountRelation(t assert.TestingT) {
 	resp, err := rpc.MCountRelation(ctx, &relation.MCountRelationRequest{
 		UserIdList: []int64{2},
 	})

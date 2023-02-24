@@ -11,6 +11,54 @@ import (
 var commentId int64
 
 func TestActionComment1(t *testing.T) {
+	doActionComment1(t)
+}
+
+func TestActionComment2(t *testing.T) {
+	doActionComment2(t)
+}
+
+func TestListComment(t *testing.T) {
+	doListComment(t)
+}
+
+func TestMCountVideoComment(t *testing.T) {
+	doMCountVideoComment(t)
+}
+
+func BenchmarkActionComment1(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doActionComment1(b)
+		}
+	})
+}
+
+func BenchmarkActionComment2(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doActionComment2(b)
+		}
+	})
+}
+
+func BenchmarkListComment(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doListComment(b)
+		}
+	})
+}
+
+func BenchmarkMCountVideoComment(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doMCountVideoComment(b)
+		}
+	})
+}
+
+func doActionComment1(t assert.TestingT) {
 	content := "TestComment评论内容"
 	resp, err := rpc.ActionComment(ctx, &comment.CommentActionRequest{
 		Token:       TOKEN,
@@ -24,7 +72,7 @@ func TestActionComment1(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestActionComment2(t *testing.T) {
+func doActionComment2(t assert.TestingT) {
 	resp, err := rpc.ActionComment(ctx, &comment.CommentActionRequest{
 		Token:       TOKEN,
 		VideoId:     7,
@@ -36,7 +84,7 @@ func TestActionComment2(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestListComment(t *testing.T) {
+func doListComment(t assert.TestingT) {
 	resp, err := rpc.ListComment(ctx, &comment.CommentListRequest{
 		Token:   TOKEN,
 		VideoId: 7,
@@ -45,7 +93,7 @@ func TestListComment(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestMCountVideoComment(t *testing.T) {
+func doMCountVideoComment(t assert.TestingT) {
 	resp, err := rpc.MCountComment(ctx, &comment.MCountVideoCommentRequest{
 		VideoIdList: []int64{7},
 	})

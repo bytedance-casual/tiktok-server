@@ -9,6 +9,66 @@ import (
 )
 
 func TestActionFavorite1(t *testing.T) {
+	doActionFavorite1(t)
+}
+
+func TestActionFavorite2(t *testing.T) {
+	doActionFavorite2(t)
+}
+
+func TestListFavorite(t *testing.T) {
+	doListFavorite(t)
+}
+
+func TestMCheckFavorite(t *testing.T) {
+	doMCheckFavorite(t)
+}
+
+func TestMCountFavorite(t *testing.T) {
+	doMCountFavorite(t)
+}
+
+func BenchmarkActionFavorite1(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doActionFavorite1(b)
+		}
+	})
+}
+
+func BenchmarkActionFavorite2(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doActionFavorite2(b)
+		}
+	})
+}
+
+func BenchmarkListFavorite(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doListFavorite(b)
+		}
+	})
+}
+
+func BenchmarkMCheckFavorite(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doMCheckFavorite(b)
+		}
+	})
+}
+
+func BenchmarkMCountFavorite(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doMCountFavorite(b)
+		}
+	})
+}
+
+func doActionFavorite1(t assert.TestingT) {
 	resp, err := rpc.ActionFavorite(ctx, &favorite.FavoriteActionRequest{
 		Token:      TOKEN,
 		VideoId:    7,
@@ -18,7 +78,7 @@ func TestActionFavorite1(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestActionFavorite2(t *testing.T) {
+func doActionFavorite2(t assert.TestingT) {
 	resp, err := rpc.ActionFavorite(ctx, &favorite.FavoriteActionRequest{
 		Token:      TOKEN,
 		VideoId:    7,
@@ -28,7 +88,7 @@ func TestActionFavorite2(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestListFavorite(t *testing.T) {
+func doListFavorite(t assert.TestingT) {
 	resp, err := rpc.ListFavorite(ctx, &favorite.FavoriteListRequest{
 		UserId: 2,
 		Token:  TOKEN,
@@ -37,7 +97,7 @@ func TestListFavorite(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestMCheckFavorite(t *testing.T) {
+func doMCheckFavorite(t assert.TestingT) {
 	resp, err := rpc.MCheckFavorite(ctx, &favorite.MCheckFavoriteRequest{
 		UserId:      2,
 		VideoIdList: []int64{7},
@@ -46,7 +106,7 @@ func TestMCheckFavorite(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestMCountFavorite(t *testing.T) {
+func doMCountFavorite(t assert.TestingT) {
 	resp, err := rpc.MCountFavorite(ctx, &favorite.MCountVideoFavoriteRequest{
 		VideoIdList: []int64{7},
 	})

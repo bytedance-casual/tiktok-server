@@ -12,6 +12,54 @@ import (
 var uuidName string
 
 func TestUser(t *testing.T) {
+	doUser(t)
+}
+
+func TestRegisterUser(t *testing.T) {
+	doRegisterUser(t)
+}
+
+func TestLoginUser(t *testing.T) {
+	doLoginUser(t)
+}
+
+func TestMGetUsers(t *testing.T) {
+	doMGetUsers(t)
+}
+
+func BenchmarkUser(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doUser(b)
+		}
+	})
+}
+
+func BenchmarkRegisterUser(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doRegisterUser(b)
+		}
+	})
+}
+
+func BenchmarkLoginUser(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doLoginUser(b)
+		}
+	})
+}
+
+func BenchmarkMGetUsers(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doMGetUsers(b)
+		}
+	})
+}
+
+func doUser(t assert.TestingT) {
 	resp, err := rpc.User(ctx, &user.UserRequest{
 		UserId: 3,
 		Token:  TOKEN,
@@ -20,7 +68,7 @@ func TestUser(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestRegisterUser(t *testing.T) {
+func doRegisterUser(t assert.TestingT) {
 	uuidName = uuid.NewV4().String()
 	resp, err := rpc.RegisterUser(ctx, &user.UserRegisterRequest{
 		Username: uuidName,
@@ -30,7 +78,7 @@ func TestRegisterUser(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestLoginUser(t *testing.T) {
+func doLoginUser(t assert.TestingT) {
 	resp, err := rpc.LoginUser(ctx, &user.UserLoginRequest{
 		Username: uuidName,
 		Password: "123456",
@@ -39,7 +87,7 @@ func TestLoginUser(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestMGetUsers(t *testing.T) {
+func doMGetUsers(t assert.TestingT) {
 	resp, err := rpc.MGetUsers(ctx, &user.UsersMGetRequest{
 		UserId:     2,
 		UserIdList: []int64{3},

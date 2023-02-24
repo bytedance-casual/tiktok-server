@@ -8,6 +8,7 @@ type Config struct {
 }
 
 type Server struct {
+	Pprof   bool
 	Address string
 }
 

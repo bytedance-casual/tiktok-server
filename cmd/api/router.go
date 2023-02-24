@@ -1,14 +1,21 @@
 package main
 
 import (
+	"github.com/DeanThompson/ginpprof"
 	"github.com/gin-gonic/gin"
 	"tiktok-server/cmd/api/handlers"
+	"tiktok-server/internal/conf"
 	"tiktok-server/internal/middleware"
 )
 
 func initRouter(engine *gin.Engine) {
 	engine.Static("/static", "../../web")
 	router := engine.Group("/douyin")
+
+	// gin pprof
+	if conf.Config.Server.Pprof {
+		ginpprof.WrapGroup(router)
+	}
 
 	// basic apis
 	router.POST("/user/register/", handlers.RegisterUser)

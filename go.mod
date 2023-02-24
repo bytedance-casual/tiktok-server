@@ -3,6 +3,7 @@ module tiktok-server
 go 1.19
 
 require (
+	github.com/DeanThompson/ginpprof v0.0.0-20201112072838-007b1e56b2e1
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.6+incompatible
 	github.com/apache/thrift v0.16.0
 	github.com/cloudwego/kitex v0.4.4

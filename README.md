@@ -94,6 +94,8 @@
 
 - 单模块单元测试 `bash ./test.sh <module_name>`
 - 联合单元测试 `bash ./test.sh all`
+- 单模块基准测试 `bash ./bench.sh <module_name>`
+- 联合基准测试 `bash ./bench.sh all`
 
 ## 贡献者名单
 

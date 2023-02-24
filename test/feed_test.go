@@ -8,10 +8,19 @@ import (
 	"tiktok-server/kitex_gen/feed"
 )
 
-// go test test2json -test.paniconexit0 -test.v
-// go tool test2json -test.v -test.paniconexit0 -test.run ^\QTestFeed\E$
-
 func TestFeed(t *testing.T) {
+	doFeed(t)
+}
+
+func BenchmarkFeed(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doFeed(b)
+		}
+	})
+}
+
+func doFeed(t assert.TestingT) {
 	resp, err := rpc.Feed(ctx, &feed.FeedRequest{
 		LatestTime: nil,
 		Token:      nil,

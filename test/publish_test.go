@@ -10,6 +10,42 @@ import (
 )
 
 func TestActionPublish(t *testing.T) {
+	doActionPublish(t)
+}
+
+func TestListPublish(t *testing.T) {
+	doListPublish(t)
+}
+
+func TestMGetVideos(t *testing.T) {
+	doMGetVideos(t)
+}
+
+func BenchmarkActionPublish(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doActionPublish(b)
+		}
+	})
+}
+
+func BenchmarkListPublish(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doListPublish(b)
+		}
+	})
+}
+
+func BenchmarkMGetVideos(b *testing.B) {
+	b.RunParallel(func(pb *testing.PB) {
+		for pb.Next() {
+			doMGetVideos(b)
+		}
+	})
+}
+
+func doActionPublish(t assert.TestingT) {
 	filePath := "/home/illtamer/Code/golang/goland/github/tiktok-server/cmd/publish/test/bear.mp4"
 	bytes, err := os.ReadFile(filePath)
 	assert.NoError(t, err)
@@ -22,7 +58,7 @@ func TestActionPublish(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestListPublish(t *testing.T) {
+func doListPublish(t assert.TestingT) {
 	resp, err := rpc.ListPublish(ctx, &publish.PublishListRequest{
 		UserId: 3,
 		Token:  TOKEN,
@@ -31,7 +67,7 @@ func TestListPublish(t *testing.T) {
 	fmt.Printf("%v", resp)
 }
 
-func TestMGetVideos(t *testing.T) {
+func doMGetVideos(t assert.TestingT) {
 	resp, err := rpc.MGetVideos(ctx, &publish.VideosMGetRequest{
 		UserId:      3,
 		VideoIdList: []int64{7},

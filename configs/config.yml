@@ -1,6 +1,9 @@
 #gorm:
 #  logger-level:
 server:
+  # http://localhost:8080/douyin/debug/pprof/
+  # go tool pprof -http=:8081 http://localhost:8080/douyin/debug/pprof/{name}
+  pprof: false
   address: '0.0.0.0:8080'
 
 oss-aliyun:
