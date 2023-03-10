@@ -1,3 +1,8 @@
+# 亮点：
+# - 物理外键 -> 逻辑外键
+# - 单独拆分评论内容
+# - 热点操作如关注接口采用软删除
+# - count 类数据动态计算
 create table comments
 (
     id         bigint auto_increment comment '逻辑主键'
