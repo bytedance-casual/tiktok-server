@@ -21,7 +21,8 @@
 
 ## 抖音项目服务端实现
 
-> 开发人员手册 [[RULES]](docs/RULES.md)
+> - [开发人员手册](docs/RULES.md)
+> - [答辩 PPT](docs/douyin.pptx)
 
 ### 相关文档
 
